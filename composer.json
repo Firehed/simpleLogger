@@ -1,7 +1,7 @@
 {
-    "name": "fguillot/simple-logger",
+    "name": "fguillot/simpleLogger",
     "description": "PHP library to write logs",
-    "homepage": "https://github.com/fguillot/simple-logger",
+    "homepage": "https://github.com/fguillot/simpleLogger",
     "type": "library",
     "license": "MIT",
     "authors": [

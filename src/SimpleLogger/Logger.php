@@ -37,6 +37,30 @@ class Logger
 	}
 
 
+	public function debug($message, $file = '', $line = '')
+	{
+		$this->logger->write(self::DEBUG, $message, $file, $line);
+	}
+
+
+	public function auth($message, $file = '', $line = '')
+	{
+		$this->logger->write(self::AUTH, $message, $file, $line);
+	}
+
+
+	public function error($message, $file = '', $line = '')
+	{
+		$this->logger->write(self::ERROR, $message, $file, $line);
+	}
+
+
+	public function info($message, $file = '', $line = '')
+	{
+		$this->logger->write(self::INFO, $message, $file, $line);
+	}
+
+
 	public function dump($variable, $file = '', $line = '')
 	{
 		$this->logger->write(self::DEBUG, \var_export($variable, true), $file = '', $line = '');

@@ -37,7 +37,7 @@ Usage
 ### Installation
 
 ```bash
-composer require fguillot/simpleLogger
+composer require fguillot/simpleLogger dev-master
 ```
 
 ### Syslog

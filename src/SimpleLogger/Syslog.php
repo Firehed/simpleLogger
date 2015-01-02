@@ -2,34 +2,34 @@
 
 namespace SimpleLogger;
 
-require_once __DIR__.'/AbstractLogger.php';
-
-use \Psr\Log\LogLevel;
+use RuntimeException;
+use Psr\Log\LogLevel;
 
 /**
- * Simple syslog implementation
+ * Syslog Logger
+ *
+ * @package SimpleLogger
+ * @author  Frédéric Guillot
  */
 class Syslog extends AbstractLogger
 {
     /**
      * Setup Syslog configuration
      *
-     * @param string $syslog_ident Application name
-     * @param int $syslog_facility See http://php.net/manual/en/function.openlog.php
-     * @return null
+     * @param  string $syslog_ident       Application name
+     * @param  int    $syslog_facility    See http://php.net/manual/en/function.openlog.php
      */
     public function __construct($syslog_ident = 'PHP', $syslog_facility = LOG_USER)
     {
-        if (! \openlog($syslog_ident, LOG_ODELAY | LOG_PID, $syslog_facility)) {
-
-            throw new \RuntimeException('Unable to connect to syslog.');
+        if (! openlog($syslog_ident, LOG_ODELAY | LOG_PID, $syslog_facility)) {
+            throw new RuntimeException('Unable to connect to syslog.');
         }
     }
 
     /**
      * Get syslog priority according to Psr\LogLevel
      *
-     * @param mixed $level
+     * @param  mixed  $level
      * @return int
      */
     public function getSyslogPriority($level)
@@ -57,16 +57,15 @@ class Syslog extends AbstractLogger
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @param  mixed   $level
+     * @param  string  $message
+     * @param  array   $context
      */
     public function log($level, $message, array $context = array())
     {
         $syslog_priority = $this->getSyslogPriority($level);
         $syslog_message = $this->interpolate($message, $context);
 
-        \syslog($syslog_priority, $syslog_message);
+        syslog($syslog_priority, $syslog_message);
     }
 }

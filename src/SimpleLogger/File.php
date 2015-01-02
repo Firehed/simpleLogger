@@ -2,22 +2,23 @@
 
 namespace SimpleLogger;
 
-require_once __DIR__.'/AbstractLogger.php';
-
-use \Psr\Log\LogLevel;
+use RuntimeException;
+use Psr\Log\LogLevel;
 
 /**
- * Simple text file output implementation
+ * File logger
+ *
+ * @package SimpleLogger
+ * @author  Frédéric Guillot
  */
 class File extends AbstractLogger
 {
     private $filename = '';
 
     /**
-     * Setup Syslog configuration
+     * Setup logger configuration
      *
-     * @param string $filename Output file
-     * @return null
+     * @param  string $filename Output file
      */
     public function __construct($filename)
     {
@@ -30,11 +31,13 @@ class File extends AbstractLogger
      * @param mixed $level
      * @param string $message
      * @param array $context
-     * @return null
      */
     public function log($level, $message, array $context = array())
     {
-        $line = '['.\date('Y-m-d H:i:s').'] ['.$level.'] '.$this->interpolate($message, $context)."\n";
-        \file_put_contents($this->filename, $line, FILE_APPEND | LOCK_EX);
+        $line = '['.date('Y-m-d H:i:s').'] ['.$level.'] '.$this->interpolate($message, $context).PHP_EOL;
+
+        if (file_put_contents($this->filename, $line, FILE_APPEND | LOCK_EX) === false) {
+            throw new RuntimeException('Unable to write to the log file.');
+        }
     }
 }

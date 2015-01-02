@@ -1,9 +1,6 @@
 <?php
 
-require 'src/Psr/Log/LoggerInterface.php';
-require 'src/Psr/Log/LogLevel.php';
-require 'src/SimpleLogger/Syslog.php';
-require 'src/SimpleLogger/File.php';
+require 'vendor/autoload.php';
 
 // Setup Syslog logging
 $logger = new SimpleLogger\Syslog('myapp');

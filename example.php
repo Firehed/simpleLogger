@@ -29,3 +29,11 @@ $values = array(
 //  'key' => 'value',
 // )
 $logger->dump($values);
+
+// Multiple handlers
+$logger = new SimpleLogger\Logger;
+$logger->setLogger(new SimpleLogger\Syslog('myapp'));
+$logger->setLogger(new SimpleLogger\File('/tmp/simplelogger.log'));
+$logger->info('my message');
+$logger->error('my error message');
+$logger->error('my error message with a {variable}', array('variable' => 'test'));

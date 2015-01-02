@@ -3,7 +3,6 @@
 namespace SimpleLogger;
 
 use RuntimeException;
-use Psr\Log\LogLevel;
 
 /**
  * File logger
@@ -11,7 +10,7 @@ use Psr\Log\LogLevel;
  * @package SimpleLogger
  * @author  Frédéric Guillot
  */
-class File extends AbstractLogger
+class File extends Base
 {
     private $filename = '';
 

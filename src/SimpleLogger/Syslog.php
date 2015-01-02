@@ -11,7 +11,7 @@ use Psr\Log\LogLevel;
  * @package SimpleLogger
  * @author  Frédéric Guillot
  */
-class Syslog extends AbstractLogger
+class Syslog extends Base
 {
     /**
      * Setup Syslog configuration

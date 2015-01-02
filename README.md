@@ -42,6 +42,8 @@ composer require fguillot/simpleLogger dev-master
 
 ### Syslog
 
+Send log messages to Syslog:
+
 ```php
 <?php
 
@@ -58,6 +60,8 @@ $logger->error('Error at {filename} at line {line}', array('filename' => __FILE_
 ```
 
 ### Text files
+
+Send log messages to a text file:
 
 ```php
 <?php
@@ -82,4 +86,22 @@ $values = array(
 //  'key' => 'value',
 // )
 $logger->dump($values);
+```
+
+### Multiple loggers
+
+Send log messages to multiple loggers:
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$logger = new SimpleLogger\Logger;
+$logger->setLogger(new SimpleLogger\Syslog('myapp'));
+$logger->setLogger(new SimpleLogger\File('/tmp/simplelogger.log'));
+
+$logger->info('my message');
+$logger->error('my error message');
+$logger->error('my error message with a {variable}', array('variable' => 'test'));
 ```

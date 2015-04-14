@@ -21,11 +21,6 @@ Author
 
 Frédéric Guillot
 
-Source code
------------
-
-On Github: [https://github.com/fguillot/simpleLogger](https://github.com/fguillot/simpleLogger)
-
 License
 -------
 

@@ -32,7 +32,7 @@ Usage
 ### Installation
 
 ```bash
-composer require fguillot/simpleLogger dev-master
+composer require fguillot/simpleLogger @stable
 ```
 
 ### Syslog
@@ -51,7 +51,7 @@ $logger = new SimpleLogger\Syslog('myapp');
 $logger->error('boo');
 
 // Output to syslog: "Jun  2 15:55:09 hostname myapp[2712]: Error at /Users/Me/Devel/libraries/simpleLogger/example.php at line 15"
-$logger->error('Error at {filename} at line {line}', array('filename' => __FILE__, 'line' => __LINE__));
+$logger->error('Error at {filename} at line {line}', ['filename' => __FILE__, 'line' => __LINE__]);
 ```
 
 ### Text files
@@ -100,3 +100,28 @@ $logger->info('my message');
 $logger->error('my error message');
 $logger->error('my error message with a {variable}', array('variable' => 'test'));
 ```
+
+### Minimum log level for loggers
+
+In this example, only messages with the level >= "error" will be sent to the Syslog handler but everything is sent to the File handler:
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+$syslog = new SimpleLogger\Syslog('myapp');
+$syslog->setLevel(Psr\Log\LogLevel::ERROR);  // Define the minimum log level
+
+$file = new SimpleLogger\File('/tmp/simplelogger.log');
+
+$logger = new SimpleLogger\Logger;
+$logger->setLogger($syslog);
+$logger->setLogger($file);
+
+$logger->debug('debug info sent only to the text file');
+$logger->error('my error message');
+$logger->error('my error message with a {variable}', array('variable' => 'test'));
+```
+
+The minimum log level is `LogLevel::DEBUG` by default.

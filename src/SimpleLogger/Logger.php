@@ -5,6 +5,7 @@ namespace SimpleLogger;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Handler for multiple loggers
@@ -20,6 +21,34 @@ class Logger extends AbstractLogger implements LoggerAwareInterface
      * @access private
      */
     private $loggers = array();
+
+    /**
+     * Get level priority (same values as Monolog)
+     *
+     * @param  mixed  $level
+     * @return integer
+     */
+    public function getLevelPriority($level)
+    {
+        switch ($level) {
+            case LogLevel::EMERGENCY:
+                return 600;
+            case LogLevel::ALERT:
+                return 550;
+            case LogLevel::CRITICAL:
+                return 500;
+            case LogLevel::ERROR:
+                return 400;
+            case LogLevel::WARNING:
+                return 300;
+            case LogLevel::NOTICE:
+                return 250;
+            case LogLevel::INFO:
+                return 200;
+        }
+
+        return 100;
+    }
 
     /**
      * Sets a logger instance on the object
@@ -41,7 +70,11 @@ class Logger extends AbstractLogger implements LoggerAwareInterface
     public function log($level, $message, array $context = array())
     {
         foreach ($this->loggers as $logger) {
-            $logger->log($level, $message, $context);
+
+            // Call the logger only if necessary
+            if ($this->getLevelPriority($level) >= $this->getLevelPriority($logger->getLevel())) {
+                $logger->log($level, $message, $context);
+            }
         }
     }
 }

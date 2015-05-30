@@ -2,6 +2,7 @@
 
 namespace SimpleLogger;
 
+use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -11,7 +12,7 @@ use Psr\Log\LoggerInterface;
  * @package SimpleLogger
  * @author  Frédéric Guillot
  */
-class Logger implements LoggerAwareInterface
+class Logger extends AbstractLogger implements LoggerAwareInterface
 {
     /**
      * Logger instances
@@ -33,14 +34,14 @@ class Logger implements LoggerAwareInterface
     /**
      * Proxy method to the real logger
      *
-     * @access public
-     * @param  string   $method     Method name
-     * @param  array    $arguments  Method arguments
+     * @param  mixed   $level
+     * @param  string  $message
+     * @param  array   $context
      */
-    public function __call($method, array $arguments = array())
+    public function log($level, $message, array $context = array())
     {
         foreach ($this->loggers as $logger) {
-            call_user_func_array(array($logger, $method), $arguments);
+            $logger->log($level, $message, $context);
         }
     }
 }

@@ -1,30 +1,13 @@
 SimpleLogger
 ============
 
-SimpleLogger is simple library to write logs in PHP.
+SimpleLogger is a PHP library to write logs.
 
-Features
---------
-
-- Simple and easy to use
 - Logging output: Syslog and Text files
-- Compatible with PSR-3 Standard Logger Interface <http://www.php-fig.org/psr/psr-3/>
-
-Requirements
-------------
-
-- PHP >= 5.3
-- Composer
-
-Author
-------
-
-Frédéric Guillot
-
-License
--------
-
-MIT
+- Compatible with [PSR-3 Standard Logger Interface](http://www.php-fig.org/psr/psr-3/)
+- Requirements: PHP >= 5.3
+- Author: Frédéric Guillot
+- License: MIT
 
 Usage
 -----
@@ -82,6 +65,8 @@ $values = array(
 // )
 $logger->dump($values);
 ```
+
+To send logs to stdout or stderr, use `php://stdout` or `php://stderr` as filename.
 
 ### Multiple loggers
 

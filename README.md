@@ -3,7 +3,7 @@ SimpleLogger
 
 SimpleLogger is a PHP library to write logs.
 
-- Logging output: Syslog and Text files
+- Drivers: Syslog, stdout, stderr and text file
 - Compatible with [PSR-3 Standard Logger Interface](http://www.php-fig.org/psr/psr-3/)
 - Requirements: PHP >= 5.3
 - Author: Frédéric Guillot
@@ -30,14 +30,28 @@ require 'vendor/autoload.php';
 // Setup Syslog logging
 $logger = new SimpleLogger\Syslog('myapp');
 
-// Output to syslog: "Jun  2 15:55:09 hostname myapp[2712]: boo"
-$logger->error('boo');
+// Output to syslog: "Jun  2 15:55:09 hostname myapp[2712]: foobar"
+$logger->error('foobar');
 
 // Output to syslog: "Jun  2 15:55:09 hostname myapp[2712]: Error at /Users/Me/Devel/libraries/simpleLogger/example.php at line 15"
 $logger->error('Error at {filename} at line {line}', ['filename' => __FILE__, 'line' => __LINE__]);
 ```
 
-### Text files
+### Stdout
+
+```php
+$logger = new \SimpleLogger\Stdout();
+$logger->error('foobar');
+```
+
+### Stderr
+
+```php
+$logger = new \SimpleLogger\Stderr();
+$logger->info('foobar');
+```
+
+### Text file
 
 Send log messages to a text file:
 
@@ -49,8 +63,8 @@ require 'vendor/autoload.php';
 // Setup File logging
 $logger = new SimpleLogger\File('/tmp/simplelogger.log');
 
-// Output to the file: "[2013-06-02 16:03:28] [info] boo"
-$logger->info('boo');
+// Output to the file: "[2013-06-02 16:03:28] [info] foobar"
+$logger->info('foobar');
 
 // Output to the file: "[2013-06-02 16:03:28] [error] Error at /Users/fred/Devel/libraries/simpleLogger/example.php at line 24"
 $logger->error('Error at {filename} at line {line}', array('filename' => __FILE__, 'line' => __LINE__));
@@ -65,8 +79,6 @@ $values = array(
 // )
 $logger->dump($values);
 ```
-
-To send logs to stdout or stderr, use `php://stdout` or `php://stderr` as filename.
 
 ### Multiple loggers
 

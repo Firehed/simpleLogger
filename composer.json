@@ -1,12 +1,12 @@
 {
-    "name": "fguillot/simpleLogger",
-    "description": "PHP library to write logs (This package is now abandoned)",
-    "homepage": "https://github.com/fguillot/simpleLogger",
+    "name": "firehed/simpleLogger",
+    "description": "PHP write logs",
+    "homepage": "https://github.com/firehed/simpleLogger",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Frédéric Guillot"
+            "name": "Eric Stern"
         }
     ],
     "require": {
@@ -14,6 +14,6 @@
         "psr/log": "~1.0"
     },
     "autoload": {
-        "psr-0": {"SimpleLogger": "src/"}
+        "psr-4": {"SimpleLogger": "src/"}
     }
 }

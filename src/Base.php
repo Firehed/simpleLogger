@@ -13,6 +13,17 @@ use Psr\Log\LogLevel;
  */
 abstract class Base extends AbstractLogger
 {
+    private const LEVELS = [
+        LogLevel::EMERGENCY => 0,
+        LogLevel::ALERT     => 1,
+        LogLevel::CRITICAL  => 2,
+        LogLevel::ERROR     => 3,
+        LogLevel::WARNING   => 4,
+        LogLevel::NOTICE    => 5,
+        LogLevel::INFO      => 6,
+        LogLevel::DEBUG     => 7,
+    ];
+
     /**
      * Minimum log level for the logger
      *
@@ -41,6 +52,15 @@ abstract class Base extends AbstractLogger
     public function getLevel()
     {
         return $this->level;
+    }
+
+    abstract protected function writeLog($level, $message, array $context = []);
+
+    public function log($level, $message, array $context = array())
+    {
+        if (self::LEVELS[$level] <= self::LEVELS[$this->level]) {
+            $this->writeLog($level, $message, $context);
+        }
     }
 
     /**

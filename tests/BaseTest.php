@@ -74,6 +74,17 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    /**
+     * @covers ::getCurrentSyslogPriority
+     * @covers ::setLevel
+     * @dataProvider syslogMap
+     */
+    public function testCorrectMappingOfPsrToSyslog($psrLevel, $syslogLevel)
+    {
+        $this->logger->setLevel($psrLevel);
+        $this->assertSame($syslogLevel, $this->logger->getCurrentSyslogPriority());
+    }
+
     public function levelFiltering()
     {
         return [
@@ -85,6 +96,20 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             [LL::NOTICE,    [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE]],
             [LL::INFO,      [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO]],
             [LL::DEBUG,     [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO, LL::DEBUG]],
+        ];
+    }
+
+    public function syslogMap(): array
+    {
+        return [
+            [LL::EMERGENCY, LOG_EMERG],
+            [LL::ALERT, LOG_ALERT],
+            [LL::CRITICAL, LOG_CRIT],
+            [LL::ERROR, LOG_ERR],
+            [LL::WARNING, LOG_WARNING],
+            [LL::NOTICE, LOG_NOTICE],
+            [LL::INFO, LOG_INFO],
+            [LL::DEBUG, LOG_DEBUG],
         ];
     }
 }

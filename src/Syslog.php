@@ -27,34 +27,6 @@ class Syslog extends Base
     }
 
     /**
-     * Get syslog priority according to Psr\LogLevel
-     *
-     * @param  mixed  $level
-     * @return integer
-     */
-    public function getSyslogPriority($level)
-    {
-        switch ($level) {
-            case LogLevel::EMERGENCY:
-                return LOG_EMERG;
-            case LogLevel::ALERT:
-                return LOG_ALERT;
-            case LogLevel::CRITICAL:
-                return LOG_CRIT;
-            case LogLevel::ERROR:
-                return LOG_ERR;
-            case LogLevel::WARNING:
-                return LOG_WARNING;
-            case LogLevel::NOTICE:
-                return LOG_NOTICE;
-            case LogLevel::INFO:
-                return LOG_INFO;
-        }
-
-        return LOG_DEBUG;
-    }
-
-    /**
      * Logs with an arbitrary level.
      *
      * @param  mixed   $level

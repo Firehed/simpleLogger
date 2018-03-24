@@ -14,14 +14,14 @@ use Psr\Log\LogLevel;
 abstract class Base extends AbstractLogger
 {
     private const LEVELS = [
-        LogLevel::EMERGENCY => 0,
-        LogLevel::ALERT     => 1,
-        LogLevel::CRITICAL  => 2,
-        LogLevel::ERROR     => 3,
-        LogLevel::WARNING   => 4,
-        LogLevel::NOTICE    => 5,
-        LogLevel::INFO      => 6,
-        LogLevel::DEBUG     => 7,
+        LogLevel::EMERGENCY => LOG_EMERG,
+        LogLevel::ALERT     => LOG_ALERT,
+        LogLevel::CRITICAL  => LOG_CRIT,
+        LogLevel::ERROR     => LOG_ERR,
+        LogLevel::WARNING   => LOG_WARNING,
+        LogLevel::NOTICE    => LOG_NOTICE,
+        LogLevel::INFO      => LOG_INFO,
+        LogLevel::DEBUG     => LOG_DEBUG,
     ];
 
     /**

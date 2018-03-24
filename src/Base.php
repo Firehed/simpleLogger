@@ -54,10 +54,21 @@ abstract class Base extends AbstractLogger
         return $this->level;
     }
 
+    /**
+     * @param string $psrLevel PSR log level
+     * @return int LOG_ constant
+     */
+    protected function getSyslogPriority($psrLevel)
+    {
+        return self::LEVELS[$psrLevel];
+    }
+
     abstract protected function writeLog($level, $message, array $context = []);
 
     public function log($level, $message, array $context = array())
     {
+        // Directly access the array and values here rather than run through
+        // getSyslogPriority to avoid the function calls in a potential hotspot
         if (self::LEVELS[$level] <= self::LEVELS[$this->level]) {
             $this->writeLog($level, $message, $context);
         }

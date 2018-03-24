@@ -13,7 +13,7 @@ use Psr\Log\LogLevel as LL;
  */
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var LoggerInterface */
+    /** @var Base */
     private $logger;
 
     private $wrote = false;
@@ -21,10 +21,16 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $this->logger = $this->getMockForAbstractClass(Base::class);
+
         $this->logger->method('writeLog')
             ->will($this->returnCallback(function () {
                 $this->wrote = true;
             }));
+    }
+
+    public function testDefaultLevelIsDebug()
+    {
+        $this->assertSame(LL::DEBUG, $this->logger->getLevel());
     }
 
     /**
@@ -68,12 +74,12 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [LL::EMERGENCY, [LL::EMERGENCY]],
-            [LL::ALERT, [LL::EMERGENCY, LL::ALERT]],
-            [LL::CRITICAL, [LL::EMERGENCY, LL::ALERT, LL::CRITICAL]],
-            [LL::ERROR, [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR]],
-            [LL::WARNING, [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING]],
-            [LL::NOTICE, [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE]],
-            [LL::INFO, [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO]],
+            [LL::ALERT,     [LL::EMERGENCY, LL::ALERT]],
+            [LL::CRITICAL,  [LL::EMERGENCY, LL::ALERT, LL::CRITICAL]],
+            [LL::ERROR,     [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR]],
+            [LL::WARNING,   [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING]],
+            [LL::NOTICE,    [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE]],
+            [LL::INFO,      [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO]],
             [LL::DEBUG, $this->allLevels()],
         ];
     }

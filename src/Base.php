@@ -55,6 +55,14 @@ abstract class Base extends AbstractLogger
     }
 
     /**
+     * Get the syslog priority constant associated with the current level
+     */
+    public function getPriority(): int
+    {
+        return $this->getSyslogPriority($this->getLevel());
+    }
+
+    /**
      * @param string $psrLevel PSR log level
      * @return int LOG_ constant
      */

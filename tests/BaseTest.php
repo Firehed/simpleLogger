@@ -28,12 +28,27 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             }));
     }
 
+    /**
+     * @covers ::getLevel
+     */
     public function testDefaultLevelIsDebug()
     {
         $this->assertSame(LL::DEBUG, $this->logger->getLevel());
     }
 
     /**
+     * @covers ::getLevel
+     * @covers ::setLevel
+     */
+    public function testSetLevel()
+    {
+        $this->assertNotSame(LL::EMERGENCY, $this->logger->getLevel());
+        $this->logger->setLevel(LL::EMERGENCY);
+        $this->assertSame(LL::EMERGENCY, $this->logger->getLevel());
+    }
+
+    /**
+     * @covers ::log
      * @dataProvider levelFiltering
      */
     public function testFiltering($atLevel, $shouldLog)

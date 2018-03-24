@@ -7,3 +7,4 @@ Thumbs.db
 *.lock
 vendor
 example.php
+/build/

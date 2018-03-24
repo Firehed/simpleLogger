@@ -2,6 +2,7 @@
 
 namespace SimpleLogger;
 
+use DateTime;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
 
@@ -123,6 +124,6 @@ abstract class Base extends AbstractLogger
      */
     protected function formatMessage($level, $message, array $context = array())
     {
-        return '['.date('Y-m-d H:i:s').'] ['.$level.'] '.$this->interpolate($message, $context).PHP_EOL;
+        return '['.date(DateTime::ATOM).'] ['.$level.'] '.$this->interpolate($message, $context).PHP_EOL;
     }
 }

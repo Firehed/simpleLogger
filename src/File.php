@@ -13,12 +13,14 @@ use RuntimeException;
 class File extends Base
 {
     /**
-     * Filename
-     *
-     * @access protected
-     * @var string
+     * @var resource
      */
-    protected $filename = '';
+    protected $fh;
+
+    /**
+     * @var bool
+     */
+    private $lock = false;
 
     /**
      * Setup logger configuration
@@ -27,7 +29,8 @@ class File extends Base
      */
     public function __construct($filename)
     {
-        $this->filename = $filename;
+        $this->lock = substr($filename, 0, 6) !== 'php://';
+        $this->fh = fopen($filename, 'a');
     }
 
     /**
@@ -41,8 +44,14 @@ class File extends Base
     {
         $line = $this->formatMessage($level, $message, $context);
 
-        if (file_put_contents($this->filename, $line, FILE_APPEND | LOCK_EX) === false) {
+        if ($this->lock) {
+            flock($this->fh, LOCK_EX);
+        }
+        if (fwrite($this->fh, $line) === false) {
             throw new RuntimeException('Unable to write to the log file.');
+        }
+        if ($this->lock) {
+            flock($this->fh, LOCK_UN);
         }
     }
 }

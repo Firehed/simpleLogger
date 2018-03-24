@@ -57,7 +57,7 @@ abstract class Base extends AbstractLogger
     /**
      * Get the syslog priority constant associated with the current level
      */
-    public function getPriority(): int
+    public function getCurrentSyslogPriority(): int
     {
         return $this->getSyslogPriority($this->getLevel());
     }

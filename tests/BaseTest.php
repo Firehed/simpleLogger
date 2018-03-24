@@ -75,14 +75,14 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers ::getPriority
+     * @covers ::getCurrentSyslogPriority
      * @covers ::setLevel
      * @dataProvider syslogMap
      */
     public function testCorrectMappingOfPsrToSyslog($psrLevel, $syslogLevel)
     {
         $this->logger->setLevel($psrLevel);
-        $this->assertSame($syslogLevel, $this->logger->getPriority());
+        $this->assertSame($syslogLevel, $this->logger->getCurrentSyslogPriority());
     }
 
     public function levelFiltering()

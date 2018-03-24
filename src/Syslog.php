@@ -62,7 +62,7 @@ class Syslog extends Base
      * @param  array   $context
      * @return null
      */
-    public function log($level, $message, array $context = array())
+    protected function writeLog($level, $message, array $context = array())
     {
         $syslogPriority = $this->getSyslogPriority($level);
         $syslogMessage = $this->interpolate($message, $context);

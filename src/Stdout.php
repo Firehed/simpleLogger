@@ -18,7 +18,7 @@ class Stdout extends Base
      * @param array  $context
      * @return null
      */
-    public function log($level, $message, array $context = array())
+    protected function writeLog($level, $message, array $context = array())
     {
         file_put_contents('php://stdout', $this->formatMessage($level, $message, $context), FILE_APPEND);
     }

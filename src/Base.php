@@ -13,6 +13,17 @@ use Psr\Log\LogLevel;
  */
 abstract class Base extends AbstractLogger
 {
+    private const LEVELS = [
+        LogLevel::EMERGENCY => LOG_EMERG,
+        LogLevel::ALERT     => LOG_ALERT,
+        LogLevel::CRITICAL  => LOG_CRIT,
+        LogLevel::ERROR     => LOG_ERR,
+        LogLevel::WARNING   => LOG_WARNING,
+        LogLevel::NOTICE    => LOG_NOTICE,
+        LogLevel::INFO      => LOG_INFO,
+        LogLevel::DEBUG     => LOG_DEBUG,
+    ];
+
     /**
      * Minimum log level for the logger
      *
@@ -43,6 +54,15 @@ abstract class Base extends AbstractLogger
         return $this->level;
     }
 
+    abstract protected function writeLog($level, $message, array $context = []);
+
+    public function log($level, $message, array $context = array())
+    {
+        if (self::LEVELS[$level] <= self::LEVELS[$this->level]) {
+            $this->writeLog($level, $message, $context);
+        }
+    }
+
     /**
      * Dump to log a variable (by example an array)
      *
@@ -67,7 +87,7 @@ abstract class Base extends AbstractLogger
         $replace = array();
 
         foreach ($context as $key => $val) {
-          $replace['{' . $key . '}'] = $val;
+            $replace['{' . $key . '}'] = $val;
         }
 
         // interpolate replacement values into the message and return

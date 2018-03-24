@@ -1,6 +1,9 @@
 SimpleLogger
 ============
 
+[![Build Status](https://travis-ci.org/Firehed/simpleLogger.svg?branch=master)](https://travis-ci.org/Firehed/simpleLogger)
+[![Coverage Status](https://coveralls.io/repos/github/Firehed/simpleLogger/badge.svg?branch=master)](https://coveralls.io/github/Firehed/simpleLogger?branch=master)
+
 SimpleLogger is a PHP library to write logs.
 
 - Drivers: Syslog, stdout, stderr and text file

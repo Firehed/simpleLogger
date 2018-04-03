@@ -1,5 +1,5 @@
 {
-    "name": "firehed/simpleLogger",
+    "name": "firehed/simplelogger",
     "description": "PHP write logs",
     "homepage": "https://github.com/firehed/simpleLogger",
     "type": "library",

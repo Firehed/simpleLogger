@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleLogger;
+namespace Firehed\SimpleLogger;
 
 use RuntimeException;
 

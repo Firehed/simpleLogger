@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace SimpleLogger;
+namespace Firehed\SimpleLogger;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel as LL;
 
 /**
- * @coversDefaultClass SimpleLogger\Base
+ * @coversDefaultClass Firehed\SimpleLogger\Base
  * @covers ::<protected>
  * @covers ::<private>
  */

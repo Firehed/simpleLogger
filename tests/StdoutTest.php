@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace SimpleLogger;
+namespace Firehed\SimpleLogger;
 
 /**
- * @coversDefaultClass SimpleLogger\Stdout
+ * @coversDefaultClass Firehed\SimpleLogger\Stdout
  * @covers ::<protected>
  * @covers ::<private>
  */

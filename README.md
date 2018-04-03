@@ -33,7 +33,7 @@ Send log messages to Syslog:
 require 'vendor/autoload.php';
 
 // Setup Syslog logging
-$logger = new SimpleLogger\Syslog('myapp');
+$logger = new Firehed\SimpleLogger\Syslog('myapp');
 
 // Output to syslog: "Jun  2 15:55:09 hostname myapp[2712]: foobar"
 $logger->error('foobar');
@@ -45,14 +45,14 @@ $logger->error('Error at {filename} at line {line}', ['filename' => __FILE__, 'l
 ### Stdout
 
 ```php
-$logger = new \SimpleLogger\Stdout();
+$logger = new \Firehed\SimpleLogger\Stdout();
 $logger->error('foobar');
 ```
 
 ### Stderr
 
 ```php
-$logger = new \SimpleLogger\Stderr();
+$logger = new \Firehed\SimpleLogger\Stderr();
 $logger->info('foobar');
 ```
 
@@ -66,7 +66,7 @@ Send log messages to a text file:
 require 'vendor/autoload.php';
 
 // Setup File logging
-$logger = new SimpleLogger\File('/tmp/simplelogger.log');
+$logger = new Firehed\SimpleLogger\File('/tmp/simplelogger.log');
 
 // Output to the file: "[2013-06-02 16:03:28] [info] foobar"
 $logger->info('foobar');
@@ -94,9 +94,9 @@ Send log messages to multiple loggers:
 
 require 'vendor/autoload.php';
 
-$logger = new SimpleLogger\ChainLogger;
-$logger->addLogger(new SimpleLogger\Syslog('myapp'));
-$logger->addLogger(new SimpleLogger\File('/tmp/simplelogger.log'));
+$logger = new Firehed\SimpleLogger\ChainLogger;
+$logger->addLogger(new Firehed\SimpleLogger\Syslog('myapp'));
+$logger->addLogger(new Firehed\SimpleLogger\File('/tmp/simplelogger.log'));
 
 $logger->info('my message');
 $logger->error('my error message');
@@ -112,14 +112,14 @@ In this example, only messages with the level >= "error" will be sent to the Sys
 
 require 'vendor/autoload.php';
 
-$syslog = new SimpleLogger\Syslog('myapp');
+$syslog = new Firehed\SimpleLogger\Syslog('myapp');
 $syslog->setLevel(Psr\Log\LogLevel::ERROR);  // Define the minimum log level
 
-$file = new SimpleLogger\File('/tmp/simplelogger.log');
+$file = new Firehed\SimpleLogger\File('/tmp/simplelogger.log');
 
-$logger = new SimpleLogger\ChainLogger;
-$logger->setLogger($syslog);
-$logger->setLogger($file);
+$logger = new Firehed\SimpleLogger\ChainLogger;
+$logger->addLogger($syslog);
+$logger->addLogger($file);
 
 $logger->debug('debug info sent only to the text file');
 $logger->error('my error message');

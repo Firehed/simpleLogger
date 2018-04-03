@@ -8,9 +8,11 @@ SimpleLogger is a PHP library to write logs.
 
 - Drivers: Syslog, stdout, stderr and text file
 - Compatible with [PSR-3 Standard Logger Interface](http://www.php-fig.org/psr/psr-3/)
-- Requirements: PHP >= 5.3
-- Author: Frédéric Guillot
+- Requirements: PHP >= 5.4
+- Author: Frédéric Guillot, Eric Stern
 - License: MIT
+
+This is a fork from Frédéric Guillot's original SimpleLogger package, which has since been abandoned. I intend to actively maintain this as needed.
 
 Usage
 -----
@@ -18,7 +20,7 @@ Usage
 ### Installation
 
 ```bash
-composer require fguillot/simpleLogger @stable
+composer require firehed/simplelogger @stable
 ```
 
 ### Syslog
@@ -92,13 +94,13 @@ Send log messages to multiple loggers:
 
 require 'vendor/autoload.php';
 
-$logger = new SimpleLogger\Logger;
-$logger->setLogger(new SimpleLogger\Syslog('myapp'));
-$logger->setLogger(new SimpleLogger\File('/tmp/simplelogger.log'));
+$logger = new SimpleLogger\ChainLogger;
+$logger->addLogger(new SimpleLogger\Syslog('myapp'));
+$logger->addLogger(new SimpleLogger\File('/tmp/simplelogger.log'));
 
 $logger->info('my message');
 $logger->error('my error message');
-$logger->error('my error message with a {variable}', array('variable' => 'test'));
+$logger->error('my error message with a {variable}', ['variable' => 'test']);
 ```
 
 ### Minimum log level for loggers
@@ -115,7 +117,7 @@ $syslog->setLevel(Psr\Log\LogLevel::ERROR);  // Define the minimum log level
 
 $file = new SimpleLogger\File('/tmp/simplelogger.log');
 
-$logger = new SimpleLogger\Logger;
+$logger = new SimpleLogger\ChainLogger;
 $logger->setLogger($syslog);
 $logger->setLogger($file);
 

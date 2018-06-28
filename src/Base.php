@@ -26,6 +26,21 @@ abstract class Base extends AbstractLogger
     ];
 
     /**
+     * The date format to use in the {date} section of the log message. Stanard
+     * PHP date() formatting rules apply.
+     *
+     * @var string
+     */
+    private $dateFormat = DateTime::ATOM;
+
+    /**
+     * The complete log message format, including prefixes.
+     *
+     * @var string
+     */
+    private $format = '[{date}] [{level}] %s';
+
+    /**
      * Minimum log level for the logger
      *
      * @access private
@@ -53,6 +68,30 @@ abstract class Base extends AbstractLogger
     public function getLevel()
     {
         return $this->level;
+    }
+
+    /**
+     * Set the date format. Any format string that date() accepts will work.
+     *
+     * @param string
+     */
+    public function setDateFormat(string $format)
+    {
+        $this->dateFormat = $format;
+    }
+
+    /**
+     * Set the message format. {date} and {level} will be substituted. '%s'
+     * must be present somewhere in the string, and the actual interpolated
+     * message being logged will be put there.
+     *
+     * @param string
+     */
+    public function setFormat(string $format)
+    {
+        if (false === strpos($format, '%s')) {
+        }
+        $this->format = $format;
     }
 
     /**
@@ -124,6 +163,14 @@ abstract class Base extends AbstractLogger
      */
     protected function formatMessage($level, $message, array $context = array())
     {
-        return '['.date(DateTime::ATOM).'] ['.$level.'] '.$this->interpolate($message, $context).PHP_EOL;
+        $formatData = [
+            'level' => $level,
+            'date' => date($this->dateFormat),
+        ];
+
+        return sprintf(
+            $this->interpolate($this->format, $formatData),
+            $this->interpolate($message, $context)
+        ) . PHP_EOL;
     }
 }

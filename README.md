@@ -127,3 +127,19 @@ $logger->error('my error message with a {variable}', array('variable' => 'test')
 ```
 
 The minimum log level is `LogLevel::DEBUG` by default.
+
+### Formatting
+
+Starting in 2.1.0, custom message formatting can be configured with the `setFormat(string $format)` method.
+The format provided MUST include `%s`, which is where the actual interpolated message will be placed.
+Formats MAY include `{date}` and/or `{level}`, which are placeholders for the timestamp and log level respectively.
+
+The default format is `[{date}] [{level}] %s`, which will result in a log message like this:
+
+```
+[2018-06-28T13:32:12+00:00] [debug] query finished in 0.0021688938140869s
+```
+
+The date defaults to ATOM format, but can also be customized via `setDateFormat(string $format)` using any format string that `date()` accepts.
+
+Note: at this time, the `Syslog` logger does not use these formats.

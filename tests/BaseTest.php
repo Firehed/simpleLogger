@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
+use LogicException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel as LL;
 
@@ -15,7 +16,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 {
     use LogLevelsTrait;
 
-    /** @var Base */
     private $logger;
 
     private $wrote = false;
@@ -83,6 +83,25 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->logger->setLevel($psrLevel);
         $this->assertSame($syslogLevel, $this->logger->getCurrentSyslogPriority());
+    }
+
+    /** @covers ::setFormat */
+    public function testSetFormat()
+    {
+        $this->assertNull($this->logger->setFormat('[{level}] %s'));
+    }
+
+    /** @covers ::setDateFormat */
+    public function testSetDateFormat()
+    {
+        $this->assertNull($this->logger->setDateFormat('%Y-%m-%d'));
+    }
+
+    /** @covers ::setFormat */
+    public function testSetFormatFailsIfPlaceholderIsMissing()
+    {
+        $this->expectException(LogicException::class);
+        $this->logger->setFormat('[{level}] oops no percent s');
     }
 
     public function levelFiltering()

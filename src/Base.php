@@ -2,6 +2,7 @@
 
 namespace Firehed\SimpleLogger;
 
+use BadMethodCallException;
 use DateTime;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
@@ -73,7 +74,7 @@ abstract class Base extends AbstractLogger
     /**
      * Set the date format. Any format string that date() accepts will work.
      *
-     * @param string
+     * @param string $format The format string
      */
     public function setDateFormat(string $format)
     {
@@ -85,11 +86,12 @@ abstract class Base extends AbstractLogger
      * must be present somewhere in the string, and the actual interpolated
      * message being logged will be put there.
      *
-     * @param string
+     * @param string $format The format string
      */
     public function setFormat(string $format)
     {
         if (false === strpos($format, '%s')) {
+            throw new BadMethodCallException('Format string must contain %s');
         }
         $this->format = $format;
     }

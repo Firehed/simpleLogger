@@ -19,7 +19,9 @@ trait BaseTestTrait
      */
     public function testIsLogger()
     {
-        $this->assertInstanceOf(LoggerInterface::class, $this->getLogger());
+        $logger = $this->getLogger();
+        $this->assertInstanceOf(LoggerInterface::class, $logger);
+        $this->assertInstanceOf(ConfigurableLoggerInterface::class, $logger);
     }
 
     /**

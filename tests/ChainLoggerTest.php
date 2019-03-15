@@ -5,6 +5,7 @@ namespace Firehed\SimpleLogger;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel as LL;
+use stdClass;
 
 /**
  * @coversDefaultClass Firehed\SimpleLogger\ChainLogger
@@ -41,7 +42,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testNonLoggerInConstruct()
     {
-        new ChainLogger([new \StdClass()]);
+        new ChainLogger([new stdClass()]);
     }
 
     /**

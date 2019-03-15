@@ -30,7 +30,11 @@ class File extends Base
     public function __construct($filename)
     {
         $this->lock = substr($filename, 0, 6) !== 'php://';
-        $this->fh = fopen($filename, 'a');
+        $fh = fopen($filename, 'a');
+        if ($fh === false) {
+            throw new RuntimeException('Could not open log file');
+        }
+        $this->fh = $fh;
     }
 
     /**

@@ -32,7 +32,7 @@ script:
   - composer phpcs
 
 after_success:
-  - travis_retry vendor/bin/php-coveralls
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:

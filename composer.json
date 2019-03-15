@@ -24,6 +24,7 @@
     "require-dev": {
         "php-coveralls/php-coveralls": "^2.0",
         "phpstan/phpstan": "^0.9.2",
+        "phpstan/phpstan-phpunit": "^0.9",
         "phpunit/phpunit": "^7.0",
         "squizlabs/php_codesniffer": "^3.2"
     },
@@ -36,7 +37,7 @@
         "coverage": "phpunit --coverage-html coverage; open coverage/index.html",
         "autofix": "phpcbf src tests",
         "phpunit": "phpunit",
-        "phpstan": "phpstan analyse --no-progress -l7 src tests",
+        "phpstan": "phpstan analyse --no-progress -l7 -c phpstan.neon src tests",
         "phpcs": "phpcs src tests"
     }
 }

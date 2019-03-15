@@ -127,10 +127,12 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     /**
      * Dump to log a variable (by example an array)
      *
+     * @deprecated in v2.2.0, will be removed in v3.0.0
      * @param mixed $variable
      */
     public function dump($variable)
     {
+        trigger_error(sprintf('%s is deprecated', __METHOD__), E_USER_DEPRECATED);
         $this->log(LogLevel::DEBUG, var_export($variable, true));
     }
 

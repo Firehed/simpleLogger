@@ -20,7 +20,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 
     private $wrote = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->logger = $this->getMockForAbstractClass(Base::class);
 

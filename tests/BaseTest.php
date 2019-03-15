@@ -107,14 +107,38 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function levelFiltering()
     {
         return [
-            [LL::EMERGENCY, [LL::EMERGENCY]],
-            [LL::ALERT,     [LL::EMERGENCY, LL::ALERT]],
-            [LL::CRITICAL,  [LL::EMERGENCY, LL::ALERT, LL::CRITICAL]],
-            [LL::ERROR,     [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR]],
-            [LL::WARNING,   [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING]],
-            [LL::NOTICE,    [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE]],
-            [LL::INFO,      [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO]],
-            [LL::DEBUG,     [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO, LL::DEBUG]],
+            [
+                LL::EMERGENCY,
+                [LL::EMERGENCY]
+            ],
+            [
+                LL::ALERT,
+                [LL::EMERGENCY, LL::ALERT]
+            ],
+            [
+                LL::CRITICAL,
+                [LL::EMERGENCY, LL::ALERT, LL::CRITICAL]
+            ],
+            [
+                LL::ERROR,
+                [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR]
+            ],
+            [
+                LL::WARNING,
+                [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING]
+            ],
+            [
+                LL::NOTICE,
+                [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE]
+            ],
+            [
+                LL::INFO,
+                [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO]
+            ],
+            [
+                LL::DEBUG,
+                [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO, LL::DEBUG]
+            ],
         ];
     }
 

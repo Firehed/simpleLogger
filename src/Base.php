@@ -55,7 +55,7 @@ abstract class Base extends AbstractLogger
      * @access public
      * @param  string  $level
      */
-    public function setLevel($level)
+    public function setLevel(string $level)
     {
         $this->level = $level;
     }

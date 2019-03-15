@@ -132,6 +132,7 @@ abstract class Base extends AbstractLogger
      */
     public function dump($variable)
     {
+        trigger_error(sprintf('%s is deprecated', __METHOD__), E_USER_DEPRECATED);
         $this->log(LogLevel::DEBUG, var_export($variable, true));
     }
 

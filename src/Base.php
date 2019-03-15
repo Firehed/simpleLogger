@@ -127,6 +127,7 @@ abstract class Base extends AbstractLogger
     /**
      * Dump to log a variable (by example an array)
      *
+     * @deprecated in v2.2.0
      * @param mixed $variable
      */
     public function dump($variable)

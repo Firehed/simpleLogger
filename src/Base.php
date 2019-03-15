@@ -13,7 +13,7 @@ use Psr\Log\LogLevel;
  * @package SimpleLogger
  * @author  Frédéric Guillot
  */
-abstract class Base extends AbstractLogger
+abstract class Base extends AbstractLogger implements ConfigurableLoggerInterface
 {
     private const LEVELS = [
         LogLevel::EMERGENCY => LOG_EMERG,
@@ -55,7 +55,7 @@ abstract class Base extends AbstractLogger
      * @access public
      * @param  string  $level
      */
-    public function setLevel($level)
+    public function setLevel($level): void
     {
         $this->level = $level;
     }
@@ -88,7 +88,7 @@ abstract class Base extends AbstractLogger
      *
      * @param string $format The format string
      */
-    public function setFormat(string $format)
+    public function setFormat(string $format): void
     {
         if (false === strpos($format, '%s')) {
             throw new BadMethodCallException('Format string must contain %s');

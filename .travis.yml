@@ -1,10 +1,36 @@
 language: php
+
+branches:
+  only:
+    - master
+
+sudo: false
+
 php:
-  - '7.1'
-  - '7.2'
+  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4snapshot
+
+matrix:
+  fast_finish: true
+
+env:
+  matrix:
+    - DEPENDENCIES="high"
+    - DEPENDENCIES="low"
+  global:
+    - DEFAULT_COMPOSER_FLAGS="--no-interaction --no-ansi --no-progress --no-suggest"
+
 install:
-  - composer install --no-interaction --no-progress --no-suggest --prefer-dist
-script: vendor/bin/phpunit --coverage-text --whitelist src/ tests/
+  - if [[ "$DEPENDENCIES" = 'high' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS; fi
+  - if [[ "$DEPENDENCIES" = 'low' ]]; then travis_retry composer update $DEFAULT_COMPOSER_FLAGS --prefer-lowest; fi
+
+script:
+  - composer phpunit
+  - composer phpstan
+  - composer phpcs
+
 after_success:
   - travis_retry vendor/bin/php-coveralls
 

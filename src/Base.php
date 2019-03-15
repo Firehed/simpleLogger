@@ -55,7 +55,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      * @access public
      * @param  string  $level
      */
-    public function setLevel($level): void
+    public function setLevel(string $level): void
     {
         $this->level = $level;
     }

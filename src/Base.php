@@ -75,6 +75,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      * Set the date format. Any format string that date() accepts will work.
      *
      * @param string $format The format string
+     * @return void
      */
     public function setDateFormat(string $format)
     {
@@ -113,6 +114,12 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
         return self::LEVELS[$psrLevel];
     }
 
+    /**
+     * @param LogLevel::* $level
+     * @param string $message
+     * @param array<string, string> $context
+     * @return void
+     */
     abstract protected function writeLog($level, $message, array $context = []);
 
     public function log($level, $message, array $context = array())
@@ -129,6 +136,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      *
      * @deprecated in v2.2.0, will be removed in v3.0.0
      * @param mixed $variable
+     * @return void
      */
     public function dump($variable)
     {
@@ -141,7 +149,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      *
      * @access protected
      * @param  string $message
-     * @param  array $context
+     * @param  array<string, string> $context
      * @return string
      */
     protected function interpolate($message, array $context = array())
@@ -162,7 +170,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      *
      * @param  mixed  $level
      * @param  string $message
-     * @param  array  $context
+     * @param  array<string, string> $context
      * @return string
      */
     protected function formatMessage($level, $message, array $context = array())

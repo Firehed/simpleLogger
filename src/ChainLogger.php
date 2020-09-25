@@ -17,9 +17,13 @@ class ChainLogger extends Base
 {
     /**
      * Logger instances
+     * @var LoggerInterface[]
      */
     private $loggers = [];
 
+    /**
+     * @param LoggerInterface[] $loggers
+     */
     public function __construct(array $loggers = [])
     {
         foreach ($loggers as $logger) {
@@ -31,21 +35,13 @@ class ChainLogger extends Base
      * Sets a logger instance on the object
      *
      * @param  LoggerInterface $logger
-     * @return null
+     * @return void
      */
     public function addLogger(LoggerInterface $logger)
     {
         $this->loggers[] = $logger;
     }
 
-    /**
-     * Proxy method to the real loggers
-     *
-     * @param  mixed   $level
-     * @param  string  $message
-     * @param  array   $context
-     * @return null
-     */
     protected function writeLog($level, $message, array $context = array())
     {
         foreach ($this->loggers as $logger) {

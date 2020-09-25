@@ -17,6 +17,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
 
+    /** @var mixed[][] */
     private $logs = [];
 
     public function getLogger(): Base

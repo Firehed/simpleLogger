@@ -37,7 +37,7 @@
         "coverage": "phpunit --coverage-html coverage; open coverage/index.html",
         "autofix": "phpcbf src tests",
         "phpunit": "phpunit",
-        "phpstan": "phpstan analyse --no-progress -l7 -c phpstan.neon src tests",
+        "phpstan": "phpstan analyse --no-progress -c phpstan.neon src tests",
         "phpcs": "phpcs src tests"
     }
 }

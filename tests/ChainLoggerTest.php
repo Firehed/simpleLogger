@@ -44,6 +44,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
     public function testNonLoggerInConstruct(): void
     {
         $this->expectException(TypeError::class);
+        // @phpstan-ignore-next-line
         new ChainLogger([new stdClass()]);
     }
 

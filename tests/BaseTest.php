@@ -82,26 +82,28 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      * @covers ::setLevel
      * @dataProvider syslogMap
      */
-    public function testCorrectMappingOfPsrToSyslog(string $psrLevel, int $syslogLevel)
+    public function testCorrectMappingOfPsrToSyslog(string $psrLevel, int $syslogLevel): void
     {
         $this->logger->setLevel($psrLevel);
         $this->assertSame($syslogLevel, $this->logger->getCurrentSyslogPriority());
     }
 
     /** @covers ::setFormat */
-    public function testSetFormat()
+    public function testSetFormat(): void
     {
+        // @phpstan-ignore-next-line
         $this->assertNull($this->logger->setFormat('[{level}] %s'));
     }
 
     /** @covers ::setDateFormat */
-    public function testSetDateFormat()
+    public function testSetDateFormat(): void
     {
+        // @phpstan-ignore-next-line
         $this->assertNull($this->logger->setDateFormat('%Y-%m-%d'));
     }
 
     /** @covers ::setFormat */
-    public function testSetFormatFailsIfPlaceholderIsMissing()
+    public function testSetFormatFailsIfPlaceholderIsMissing(): void
     {
         $this->expectException(LogicException::class);
         $this->logger->setFormat('[{level}] oops no percent s');
@@ -148,6 +150,9 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @return array<string|int>[]
+     */
     public function syslogMap(): array
     {
         return [

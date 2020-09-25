@@ -42,6 +42,7 @@ trait BaseTestTrait
     public function testSimpleWriteViaLog(string $level): void
     {
         $this->assertNull(
+            // @phpstan-ignore-next-line
             $this->getLogger()->log($level, 'Some message')
         );
     }
@@ -53,6 +54,7 @@ trait BaseTestTrait
     public function testInterpolatedMessageAtAllLevels(string $level): void
     {
         $this->assertNull(
+            // @phpstan-ignore-next-line
             $this->getLogger()->log(
                 $level,
                 'Message with {format}',

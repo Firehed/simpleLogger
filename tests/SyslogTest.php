@@ -12,7 +12,7 @@ class SyslogTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
 
-    public function getLogger()
+    public function getLogger(): Base
     {
         return new Syslog();
     }

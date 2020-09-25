@@ -19,7 +19,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 
     private $logs = [];
 
-    public function getLogger()
+    public function getLogger(): Base
     {
         return new ChainLogger();
     }
@@ -27,7 +27,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::__construct
      */
-    public function testLoggerInConstruct()
+    public function testLoggerInConstruct(): void
     {
         $this->assertInstanceOf(
             ChainLogger::class,
@@ -40,7 +40,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::__construct
      */
-    public function testNonLoggerInConstruct()
+    public function testNonLoggerInConstruct(): void
     {
         $this->expectException(TypeError::class);
         new ChainLogger([new stdClass()]);
@@ -49,7 +49,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::addLogger
      */
-    public function testWithOneLogger()
+    public function testWithOneLogger(): void
     {
         $chain = new ChainLogger();
         $mock = $this->makeMockLogger();
@@ -65,7 +65,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         ], $this->logs);
     }
 
-    public function testWithMultipleLoggers()
+    public function testWithMultipleLoggers(): void
     {
         $chain = new ChainLogger();
 

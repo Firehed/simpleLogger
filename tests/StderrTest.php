@@ -12,7 +12,7 @@ class StderrTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
 
-    public function getLogger()
+    public function getLogger(): Base
     {
         return $this->getMockBuilder(Stderr::class)
             ->disableOriginalConstructor()
@@ -22,7 +22,7 @@ class StderrTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::__construct
      */
-    public function testDefaultConstrutor()
+    public function testDefaultConstrutor(): void
     {
         $this->assertInstanceOf(Stderr::class, new Stderr());
     }

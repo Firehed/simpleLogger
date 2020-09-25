@@ -16,8 +16,10 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 {
     use LogLevelsTrait;
 
+    /** @var Base | \PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
+    /** @var bool */
     private $wrote = false;
 
     public function setUp(): void
@@ -33,7 +35,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::getLevel
      */
-    public function testDefaultLevelIsDebug()
+    public function testDefaultLevelIsDebug(): void
     {
         $this->assertSame(LL::DEBUG, $this->logger->getLevel());
     }
@@ -42,7 +44,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      * @covers ::getLevel
      * @covers ::setLevel
      */
-    public function testSetLevel()
+    public function testSetLevel(): void
     {
         $this->assertNotSame(LL::EMERGENCY, $this->logger->getLevel());
         $this->logger->setLevel(LL::EMERGENCY);
@@ -52,8 +54,9 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::log
      * @dataProvider levelFiltering
+     * @param array<LL::*> $shouldLog Levels which should be logged
      */
-    public function testFiltering($atLevel, $shouldLog)
+    public function testFiltering(string $atLevel, array $shouldLog): void
     {
         $this->logger->setLevel($atLevel);
         foreach ($this->allLevels() as $levelDP) {
@@ -79,7 +82,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      * @covers ::setLevel
      * @dataProvider syslogMap
      */
-    public function testCorrectMappingOfPsrToSyslog($psrLevel, $syslogLevel)
+    public function testCorrectMappingOfPsrToSyslog(string $psrLevel, int $syslogLevel)
     {
         $this->logger->setLevel($psrLevel);
         $this->assertSame($syslogLevel, $this->logger->getCurrentSyslogPriority());
@@ -104,7 +107,10 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->logger->setFormat('[{level}] oops no percent s');
     }
 
-    public function levelFiltering()
+    /**
+     * @return array<LL::*|array<LL::*>>[]
+     */
+    public function levelFiltering(): array
     {
         return [
             [

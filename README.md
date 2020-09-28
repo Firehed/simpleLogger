@@ -10,7 +10,7 @@ SimpleLogger is a PHP library to write logs.
 
 - Drivers: Syslog, stdout, stderr and text file
 - Compatible with [PSR-3 Standard Logger Interface](http://www.php-fig.org/psr/psr-3/)
-- Requirements: PHP >= 7.1
+- Requirements: PHP >= 7.2 (older versions may work, but are not tested)
 - Author: Frédéric Guillot, Eric Stern
 - License: MIT
 
@@ -22,7 +22,7 @@ Usage
 ### Installation
 
 ```bash
-composer require firehed/simplelogger @stable
+composer require firehed/simplelogger
 ```
 
 ### Syslog

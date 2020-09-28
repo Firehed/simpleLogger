@@ -22,7 +22,6 @@
         }
     },
     "require-dev": {
-        "php-coveralls/php-coveralls": "^2.0",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpunit/phpunit": "^8.2 || ^9.0",

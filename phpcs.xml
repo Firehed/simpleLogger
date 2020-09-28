@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <ruleset>
-    <rule ref="PSR2" />
-    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
-        <!-- Ideally this would be relative, but it's not super well-supported.
-             See https://github.com/squizlabs/PHP_CodeSniffer/issues/981 -->
-        <exclude-pattern>*/db/*</exclude-pattern>
-    </rule>
+    <!-- Default paths to cover -->
+    <file>src</file>
+    <file>tests</file>
+
+    <rule ref="PSR12"/>
 </ruleset>

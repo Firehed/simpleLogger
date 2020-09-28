@@ -35,9 +35,9 @@
           "@phpcs"
         ],
         "coverage": "phpunit --coverage-html coverage; open coverage/index.html",
-        "autofix": "phpcbf src tests",
+        "autofix": "phpcbf",
         "phpunit": "phpunit",
         "phpstan": "phpstan analyse --no-progress",
-        "phpcs": "phpcs src tests"
+        "phpcs": "phpcs"
     }
 }

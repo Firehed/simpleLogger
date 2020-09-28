@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
@@ -7,6 +8,10 @@ use Psr\Log\LogLevel;
 
 trait LogLevelsTrait
 {
+    /**
+     * @return array<LogLevel::*>[] The LogLevel constants, formatted for use
+     * as a DataProvider
+     */
     public function allLevels(): array
     {
         return [

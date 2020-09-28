@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Firehed\SimpleLogger;
 
 use RuntimeException;
@@ -26,14 +28,6 @@ class Syslog extends Base
         }
     }
 
-    /**
-     * Logs with an arbitrary level.
-     *
-     * @param  mixed   $level
-     * @param  string  $message
-     * @param  array   $context
-     * @return null
-     */
     protected function writeLog($level, $message, array $context = array())
     {
         $syslogPriority = $this->getSyslogPriority($level);

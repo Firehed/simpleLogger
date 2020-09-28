@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
@@ -17,9 +18,10 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
 
+    /** @var mixed[][] */
     private $logs = [];
 
-    public function getLogger()
+    public function getLogger(): Base
     {
         return new ChainLogger();
     }
@@ -27,7 +29,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::__construct
      */
-    public function testLoggerInConstruct()
+    public function testLoggerInConstruct(): void
     {
         $this->assertInstanceOf(
             ChainLogger::class,
@@ -40,16 +42,17 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::__construct
      */
-    public function testNonLoggerInConstruct()
+    public function testNonLoggerInConstruct(): void
     {
         $this->expectException(TypeError::class);
+        // @phpstan-ignore-next-line
         new ChainLogger([new stdClass()]);
     }
 
     /**
      * @covers ::addLogger
      */
-    public function testWithOneLogger()
+    public function testWithOneLogger(): void
     {
         $chain = new ChainLogger();
         $mock = $this->makeMockLogger();
@@ -65,7 +68,7 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         ], $this->logs);
     }
 
-    public function testWithMultipleLoggers()
+    public function testWithMultipleLoggers(): void
     {
         $chain = new ChainLogger();
 

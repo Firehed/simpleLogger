@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
@@ -12,7 +13,7 @@ class SyslogTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
 
-    public function getLogger()
+    public function getLogger(): Base
     {
         return new Syslog();
     }

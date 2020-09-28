@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Firehed\SimpleLogger;
 
 use RuntimeException;
@@ -37,13 +39,6 @@ class File extends Base
         $this->fh = $fh;
     }
 
-    /**
-     * Logs with an arbitrary level.
-     *
-     * @param mixed  $level
-     * @param string $message
-     * @param array  $context
-     */
     protected function writeLog($level, $message, array $context = array())
     {
         $line = $this->formatMessage($level, $message, $context);

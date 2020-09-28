@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
@@ -17,7 +18,7 @@ trait BaseTestTrait
     /**
      * @covers ::__construct
      */
-    public function testIsLogger()
+    public function testIsLogger(): void
     {
         $logger = $this->getLogger();
         $this->assertInstanceOf(LoggerInterface::class, $logger);
@@ -28,7 +29,7 @@ trait BaseTestTrait
      * @covers ::log
      * @dataProvider allLevels
      */
-    public function testSimpleWriteViaDirect($level)
+    public function testSimpleWriteViaDirect(string $level): void
     {
         $this->assertNull(
             $this->getLogger()->{$level}('Some message')
@@ -39,9 +40,10 @@ trait BaseTestTrait
      * @covers ::log
      * @dataProvider allLevels
      */
-    public function testSimpleWriteViaLog($level)
+    public function testSimpleWriteViaLog(string $level): void
     {
         $this->assertNull(
+            // @phpstan-ignore-next-line
             $this->getLogger()->log($level, 'Some message')
         );
     }
@@ -50,9 +52,10 @@ trait BaseTestTrait
      * @covers ::log
      * @dataProvider allLevels
      */
-    public function testInterpolatedMessageAtAllLevels($level)
+    public function testInterpolatedMessageAtAllLevels(string $level): void
     {
         $this->assertNull(
+            // @phpstan-ignore-next-line
             $this->getLogger()->log(
                 $level,
                 'Message with {format}',

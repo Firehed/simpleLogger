@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
@@ -12,7 +13,7 @@ class StdoutTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
 
-    public function getLogger()
+    public function getLogger(): Base
     {
         return $this->getMockBuilder(Stdout::class)
             ->disableOriginalConstructor()
@@ -22,7 +23,7 @@ class StdoutTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers ::__construct
      */
-    public function testDefaultConstrutor()
+    public function testDefaultConstrutor(): void
     {
         $this->assertInstanceOf(Stdout::class, new Stdout());
     }

@@ -1,6 +1,6 @@
 {
     "name": "firehed/simplelogger",
-    "description": "Logger compatible with PSR-3",
+    "description": "Logger compatible with PSR-3. Supports writing to files, STDOUT, STDERR, and syslog. Also provides a chain logger which can write to multiple destinations.",
     "keywords": [
         "log",
         "logs",

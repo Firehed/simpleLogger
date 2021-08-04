@@ -118,7 +118,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * @param LogLevel::* $level
-     * @param string $message
+     * @param string|\Stringable $message
      * @param array<string, string> $context
      * @return void
      */
@@ -154,7 +154,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      * Interpolates context values into the message placeholders.
      *
      * @access protected
-     * @param  string $message
+     * @param  string|\Stringable $message
      * @param  array<string, string> $context
      * @return string
      */
@@ -168,14 +168,14 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
         }
 
         // interpolate replacement values into the message and return
-        return strtr($message, $replace);
+        return strtr((string)$message, $replace);
     }
 
     /**
      * Format log message
      *
      * @param  mixed  $level
-     * @param  string $message
+     * @param  string|\Stringable $message
      * @param  array<string, string> $context
      * @return string
      */

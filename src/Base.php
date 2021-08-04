@@ -124,7 +124,11 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      */
     abstract protected function writeLog($level, $message, array $context = []);
 
-    public function log($level, $message, array $context = array())
+
+    /**
+     * @param mixed[] $context
+     */
+    public function log($level, $message, array $context = array()): void
     {
         // Directly access the array and values here rather than run through
         // getSyslogPriority to avoid the function calls in a potential hotspot

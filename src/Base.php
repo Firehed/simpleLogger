@@ -118,13 +118,16 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * @param LogLevel::* $level
-     * @param string $message
-     * @param array<string, string> $context
-     * @return void
+     * @param string|\Stringable $message
+     * @param array<string, mixed> $context
      */
-    abstract protected function writeLog($level, $message, array $context = []);
+    abstract protected function writeLog($level, $message, array $context = []): void;
 
-    public function log($level, $message, array $context = array())
+    /**
+     * @param LogLevel::* $level
+     * @param array<string, mixed> $context
+     */
+    public function log($level, $message, array $context = array()): void
     {
         // Directly access the array and values here rather than run through
         // getSyslogPriority to avoid the function calls in a potential hotspot
@@ -138,9 +141,8 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      *
      * @deprecated in v2.2.0, will be removed in v3.0.0
      * @param mixed $variable
-     * @return void
      */
-    public function dump($variable)
+    public function dump($variable): void
     {
         trigger_error(sprintf('%s is deprecated', __METHOD__), E_USER_DEPRECATED);
         $this->log(LogLevel::DEBUG, var_export($variable, true));
@@ -149,12 +151,10 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     /**
      * Interpolates context values into the message placeholders.
      *
-     * @access protected
-     * @param  string $message
-     * @param  array<string, string> $context
-     * @return string
+     * @param string|\Stringable $message
+     * @param array<string, mixed> $context
      */
-    protected function interpolate($message, array $context = array())
+    protected function interpolate($message, array $context = array()): string
     {
         // build a replacement array with braces around the context keys
         $replace = array();
@@ -164,18 +164,17 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
         }
 
         // interpolate replacement values into the message and return
-        return strtr($message, $replace);
+        return strtr((string)$message, $replace);
     }
 
     /**
      * Format log message
      *
-     * @param  mixed  $level
-     * @param  string $message
-     * @param  array<string, string> $context
-     * @return string
+     * @param LogLevel::* $level
+     * @param string|\Stringable $message
+     * @param array<string, mixed> $context
      */
-    protected function formatMessage($level, $message, array $context = array())
+    protected function formatMessage(string $level, $message, array $context = array()): string
     {
         $formatData = [
             'level' => $level,

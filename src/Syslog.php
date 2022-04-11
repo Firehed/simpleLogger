@@ -28,7 +28,7 @@ class Syslog extends Base
         }
     }
 
-    protected function writeLog($level, $message, array $context = array())
+    protected function writeLog($level, $message, array $context = array()): void
     {
         $syslogPriority = $this->getSyslogPriority($level);
         $syslogMessage = $this->interpolate($message, $context);

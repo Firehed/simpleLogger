@@ -24,6 +24,9 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
+        psr-log-version:
+          - '1.0'
+          - '2.0'
 
     steps:
       - name: Check out code
@@ -53,6 +56,10 @@ jobs:
           --no-suggest
           --prefer-dist
           ${{ matrix.dep-version }}
+
+      - name: Install specific log version
+        run: composer update --no-interaction --prefer-dist psr/log:^${{ matrix.psr-log-version }}
+
 
       - name: PHPUnit
         run: vendor/bin/phpunit

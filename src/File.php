@@ -39,7 +39,7 @@ class File extends Base
         $this->fh = $fh;
     }
 
-    protected function writeLog($level, $message, array $context = array())
+    protected function writeLog($level, $message, array $context = array()): void
     {
         $line = $this->formatMessage($level, $message, $context);
 

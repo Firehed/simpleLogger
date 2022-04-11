@@ -24,6 +24,18 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
+        psr-log-version:
+          - '1.0'
+          - '2.0'
+        exclude:
+          # psr/log:2.0 needs PHP8
+          - php: '7.2'
+            psr-log-version: '2.0'
+          - php: '7.3'
+            psr-log-version: '2.0'
+          - php: '7.4'
+            psr-log-version: '2.0'
+
 
     steps:
       - name: Check out code
@@ -41,9 +53,11 @@ jobs:
         uses: actions/cache@v2
         with:
           path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}-${{ matrix.php }}-${{ matrix.dep-version }}-${{ matrix.psr-log-version }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.php }}-${{ matrix.dep-version }}-php-
+            ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}-${{ matrix.php }}-${{ matrix.dep-version }}
+            ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}-${{ matrix.php }}
+            ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}
 
       - name: Install dependencies
         run: composer update
@@ -53,6 +67,10 @@ jobs:
           --no-suggest
           --prefer-dist
           ${{ matrix.dep-version }}
+
+      - name: Install specific log version
+        run: composer update --no-interaction --prefer-dist psr/log:^${{ matrix.psr-log-version }}
+
 
       - name: PHPUnit
         run: vendor/bin/phpunit

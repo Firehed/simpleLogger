@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
+use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -52,6 +53,7 @@ trait BaseTestTrait
     /**
      * @covers ::log
      * @dataProvider allLevels
+     * @param LogLevel::* $level
      */
     public function testInterpolatedMessageAtAllLevels(string $level): void
     {

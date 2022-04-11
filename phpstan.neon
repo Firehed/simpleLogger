@@ -1,8 +1,6 @@
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
-    ignoreErrors:
-        - '#Call to method PHPUnit\\Framework\\Assert::assertNull\(\) with void will always evaluate to false#'
     level: max
     paths:
         - src

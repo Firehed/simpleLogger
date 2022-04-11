@@ -172,7 +172,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      * @param LogLevel::* $level
      * @param array<string, mixed> $context
      */
-    protected function formatMessage($level, $message, array $context = array())
+    protected function formatMessage(string $level, string $message, array $context = array()): string
     {
         $formatData = [
             'level' => $level,

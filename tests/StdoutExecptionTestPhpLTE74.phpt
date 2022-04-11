@@ -1,5 +1,11 @@
 --TEST--
 Logging to stdout
+--SKIPIF--
+<?php
+if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+    echo 'skip';
+    exit;
+}
 --FILE--
 <?php
 require 'vendor/autoload.php';
@@ -11,6 +17,7 @@ $logger->error('Network call failed', ['exception' => $e]);
 ?>
 --EXPECTF--
 [%s] [error] Network call failed
-[%s] [error] Network call failed RuntimeException: Got back 502 response in Standard input code:%d
+[%s] [error] Network call failed RuntimeException: Got back 502 response in %s:%d
 Stack trace:
-#0 {main}
+#0 Standard input code(%d): require()
+#1 {main}

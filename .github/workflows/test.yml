@@ -24,6 +24,7 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
+          - '8.1'
         psr-log-version:
           - '1.0'
           - '2.0'
@@ -35,7 +36,6 @@ jobs:
             psr-log-version: '2.0'
           - php: '7.4'
             psr-log-version: '2.0'
-
 
     steps:
       - name: Check out code

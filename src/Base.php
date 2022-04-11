@@ -8,6 +8,7 @@ use BadMethodCallException;
 use DateTime;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
+use Throwable;
 
 /**
  * Base class for loggers
@@ -28,6 +29,8 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
         LogLevel::DEBUG     => LOG_DEBUG,
     ];
 
+    private const EXCEPTION_INTREPOLATION_KEY = 'simplelogger-internal-exception-render';
+
     /**
      * The date format to use in the {date} section of the log message. Stanard
      * PHP date() formatting rules apply.
@@ -46,15 +49,20 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     /**
      * Minimum log level for the logger
      *
-     * @access private
      * @var    string
      */
     private $level = LogLevel::DEBUG;
 
     /**
+     * Whether to render exceptions in context automatically
+     *
+     * @var bool
+     */
+    private $renderExceptions = false;
+
+    /**
      * Set minimum log level
      *
-     * @access public
      * @param  string  $level
      */
     public function setLevel(string $level): void
@@ -82,6 +90,11 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     public function setDateFormat(string $format)
     {
         $this->dateFormat = $format;
+    }
+
+    public function setRenderExceptions(bool $render): void
+    {
+        $this->renderExceptions = $render;
     }
 
     /**
@@ -172,7 +185,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      *
      * @param  mixed  $level
      * @param  string $message
-     * @param  array<string, string> $context
+     * @param  array<string, mixed> $context
      * @return string
      */
     protected function formatMessage($level, $message, array $context = array())
@@ -181,6 +194,16 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
             'level' => $level,
             'date' => date($this->dateFormat),
         ];
+
+        if ($this->renderExceptions && array_key_exists('exception', $context)) {
+            if ($context['exception'] instanceof Throwable) {
+                $exceptionMessage = (string) $context['exception'];
+                $message .= ' {' . self::EXCEPTION_INTREPOLATION_KEY . '}';
+                $context[self::EXCEPTION_INTREPOLATION_KEY] = $exceptionMessage;
+            } else {
+                trigger_error('context.exception is not a Throwable', E_USER_ERROR);
+            }
+        }
 
         return sprintf(
             $this->interpolate($this->format, $formatData),

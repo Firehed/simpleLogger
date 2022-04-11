@@ -11,4 +11,6 @@ interface ConfigurableLoggerInterface extends LoggerInterface
     public function setFormat(string $format): void;
 
     public function setLevel(string $level): void;
+
+    public function setRenderExceptions(bool $render): void;
 }

@@ -12,5 +12,4 @@ $logger->error('Network call failed', ['exception' => $e]);
 --EXPECTF--
 [%s] [error] Network call failed
 [%s] [error] Network call failed RuntimeException: Got back 502 response in Standard input code:%d
-Stack trace:
-#0 {main}
+Stack trace:%A

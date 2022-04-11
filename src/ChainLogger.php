@@ -44,7 +44,7 @@ class ChainLogger extends Base
         $this->loggers[] = $logger;
     }
 
-    protected function writeLog($level, $message, array $context = array())
+    protected function writeLog($level, $message, array $context = array()): void
     {
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);

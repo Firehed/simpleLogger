@@ -118,16 +118,16 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * @param LogLevel::* $level
-     * @param string $message
+     * @param string|\Stringable $message
      * @param array<string, mixed> $context
-     * @return void
      */
-    abstract protected function writeLog($level, $message, array $context = []);
+    abstract protected function writeLog($level, $message, array $context = []): void;
 
     /**
      * @param LogLevel::* $level
+     * @param array<string, mixed> $context
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = array()): void
     {
         // Directly access the array and values here rather than run through
         // getSyslogPriority to avoid the function calls in a potential hotspot
@@ -151,9 +151,10 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     /**
      * Interpolates context values into the message placeholders.
      *
+     * @param string|\Stringable $message
      * @param array<string, mixed> $context
      */
-    protected function interpolate(string $message, array $context = array()): string
+    protected function interpolate($message, array $context = array()): string
     {
         // build a replacement array with braces around the context keys
         $replace = array();
@@ -163,16 +164,17 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
         }
 
         // interpolate replacement values into the message and return
-        return strtr($message, $replace);
+        return strtr((string)$message, $replace);
     }
 
     /**
      * Format log message
      *
      * @param LogLevel::* $level
+     * @param string|\Stringable $message
      * @param array<string, mixed> $context
      */
-    protected function formatMessage(string $level, string $message, array $context = array()): string
+    protected function formatMessage(string $level, $message, array $context = array()): string
     {
         $formatData = [
             'level' => $level,

@@ -145,3 +145,14 @@ The default format is `[{date}] [{level}] %s`, which will result in a log messag
 The date defaults to ATOM format, but can also be customized via `setDateFormat(string $format)` using any format string that `date()` accepts.
 
 Note: at this time, the `Syslog` logger does not use these formats.
+
+### Exception rendering
+
+Starting in 2.4.0, the loggers in this library have the ability to automatically render exceptions when passed to `$context` in the `exception` index.
+To avoid changing existing logging formats, this behavior must be explicitly adopted:
+
+```php
+$logger->setRenderExceptions(true);
+```
+
+If configured AND `$context['exception'] instanceof \Throwable`, then the exception will be cast to a string and appended to the end of the message.

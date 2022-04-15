@@ -199,8 +199,6 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
                 $exceptionMessage = (string) $context['exception'];
                 $message .= ' {' . self::EXCEPTION_INTREPOLATION_KEY . '}';
                 $context[self::EXCEPTION_INTREPOLATION_KEY] = $exceptionMessage;
-            } else {
-                trigger_error('context.exception is not a Throwable', E_USER_ERROR);
             }
         }
 

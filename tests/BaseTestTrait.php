@@ -41,29 +41,26 @@ trait BaseTestTrait
     /**
      * @covers ::log
      * @dataProvider allLevels
+     * @param LogLevel::* $level
+     * @doesNotPerformAssertions
      */
     public function testSimpleWriteViaLog(string $level): void
     {
-        $this->assertNull(
-            // @phpstan-ignore-next-line
-            $this->getLogger()->log($level, 'Some message')
-        );
+        $this->getLogger()->log($level, 'Some message');
     }
 
     /**
      * @covers ::log
      * @dataProvider allLevels
      * @param LogLevel::* $level
+     * @doesNotPerformAssertions
      */
     public function testInterpolatedMessageAtAllLevels(string $level): void
     {
-        $this->assertNull(
-            // @phpstan-ignore-next-line
-            $this->getLogger()->log(
-                $level,
-                'Message with {format}',
-                ['format' => 'a placeholder']
-            )
+        $this->getLogger()->log(
+            $level,
+            'Message with {format}',
+            ['format' => 'a placeholder']
         );
     }
 

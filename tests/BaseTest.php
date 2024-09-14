@@ -7,10 +7,14 @@ namespace Firehed\SimpleLogger;
 use LogicException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel as LL;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass Firehed\SimpleLogger\Base
- */
+#[CoversClass(Base::class)]
+#[Small]
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
     use LogLevelsTrait;
@@ -31,18 +35,11 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             }));
     }
 
-    /**
-     * @covers ::getLevel
-     */
     public function testDefaultLevelIsDebug(): void
     {
         $this->assertSame(LL::DEBUG, $this->logger->getLevel());
     }
 
-    /**
-     * @covers ::getLevel
-     * @covers ::setLevel
-     */
     public function testSetLevel(): void
     {
         $this->assertNotSame(LL::EMERGENCY, $this->logger->getLevel());
@@ -51,10 +48,9 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers ::log
-     * @dataProvider levelFiltering
      * @param array<LL::*> $shouldLog Levels which should be logged
      */
+    #[DataProvider('levelFiltering')]
     public function testFiltering(string $atLevel, array $shouldLog): void
     {
         $this->logger->setLevel($atLevel);
@@ -76,21 +72,18 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /** @covers ::setFormat */
     public function testSetFormat(): void
     {
         // @phpstan-ignore-next-line
         $this->assertNull($this->logger->setFormat('[{level}] %s'));
     }
 
-    /** @covers ::setDateFormat */
     public function testSetDateFormat(): void
     {
         // @phpstan-ignore-next-line
         $this->assertNull($this->logger->setDateFormat('%Y-%m-%d'));
     }
 
-    /** @covers ::setFormat */
     public function testSetFormatFailsIfPlaceholderIsMissing(): void
     {
         $this->expectException(LogicException::class);

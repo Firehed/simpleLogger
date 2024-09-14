@@ -6,8 +6,6 @@ namespace Firehed\SimpleLogger;
 
 /**
  * @coversDefaultClass Firehed\SimpleLogger\Stderr
- * @covers ::<protected>
- * @covers ::<private>
  */
 class StderrTest extends \PHPUnit\Framework\TestCase
 {

@@ -10,8 +10,6 @@ use Psr\Log\LogLevel as LL;
 
 /**
  * @coversDefaultClass Firehed\SimpleLogger\Base
- * @covers ::<protected>
- * @covers ::<private>
  */
 class BaseTest extends \PHPUnit\Framework\TestCase
 {

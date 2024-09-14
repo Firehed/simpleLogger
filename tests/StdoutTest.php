@@ -6,8 +6,6 @@ namespace Firehed\SimpleLogger;
 
 /**
  * @coversDefaultClass Firehed\SimpleLogger\Stdout
- * @covers ::<protected>
- * @covers ::<private>
  */
 class StdoutTest extends \PHPUnit\Framework\TestCase
 {

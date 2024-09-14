@@ -6,8 +6,6 @@ namespace Firehed\SimpleLogger;
 
 /**
  * @coversDefaultClass Firehed\SimpleLogger\Syslog
- * @covers ::<protected>
- * @covers ::<private>
  */
 class SyslogTest extends \PHPUnit\Framework\TestCase
 {

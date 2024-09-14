@@ -11,8 +11,6 @@ use TypeError;
 
 /**
  * @coversDefaultClass Firehed\SimpleLogger\ChainLogger
- * @covers ::<protected>
- * @covers ::<private>
  */
 class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 {

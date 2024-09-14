@@ -102,7 +102,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<LL::*|array<LL::*>>[]
      */
-    public function levelFiltering(): array
+    public static function levelFiltering(): array
     {
         return [
             [

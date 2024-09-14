@@ -60,7 +60,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     public function testFiltering(string $atLevel, array $shouldLog): void
     {
         $this->logger->setLevel($atLevel);
-        foreach ($this->allLevels() as $levelDP) {
+        foreach (self::allLevels() as $levelDP) {
             list($level) = $levelDP;
             $this->wrote = false;
             $this->logger->log($level, 'someMessage');

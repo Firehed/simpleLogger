@@ -12,7 +12,7 @@ trait LogLevelsTrait
      * @return array<LogLevel::*>[] The LogLevel constants, formatted for use
      * as a DataProvider
      */
-    public function allLevels(): array
+    public static function allLevels(): array
     {
         return [
             [LogLevel::EMERGENCY],

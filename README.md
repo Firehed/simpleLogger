@@ -75,16 +75,6 @@ $logger->info('foobar');
 
 // Output to the file: "[2013-06-02 16:03:28] [error] Error at /Users/fred/Devel/libraries/simpleLogger/example.php at line 24"
 $logger->error('Error at {filename} at line {line}', array('filename' => __FILE__, 'line' => __LINE__));
-
-// Dump a variable
-$values = array(
-    'key' => 'value'
-);
-
-// Output: [2013-06-02 16:05:32] [debug] array (
-//  'key' => 'value',
-// )
-$logger->dump($values);
 ```
 
 ### Multiple loggers

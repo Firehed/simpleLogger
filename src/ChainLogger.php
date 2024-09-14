@@ -8,6 +8,7 @@ use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Stringable;
 
 /**
  * Handler for multiple loggers
@@ -44,7 +45,7 @@ class ChainLogger extends Base
         $this->loggers[] = $logger;
     }
 
-    protected function writeLog($level, $message, array $context = array()): void
+    protected function writeLog($level, string|Stringable $message, array $context = array()): void
     {
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);

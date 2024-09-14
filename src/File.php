@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Firehed\SimpleLogger;
 
 use RuntimeException;
+use Stringable;
 
 /**
  * File logger
@@ -39,7 +40,7 @@ class File extends Base
         $this->fh = $fh;
     }
 
-    protected function writeLog($level, $message, array $context = array()): void
+    protected function writeLog($level, string|Stringable $message, array $context = array()): void
     {
         $line = $this->formatMessage($level, $message, $context);
 

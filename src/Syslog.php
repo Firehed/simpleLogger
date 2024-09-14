@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
-use RuntimeException;
 use Psr\Log\LogLevel;
+use Stringable;
 
 /**
  * Syslog Logger
@@ -23,12 +23,10 @@ class Syslog extends Base
      */
     public function __construct($ident = 'PHP', $facility = LOG_USER)
     {
-        if (! openlog($ident, LOG_ODELAY | LOG_PID, $facility)) {
-            throw new RuntimeException('Unable to connect to syslog.');
-        }
+        openlog($ident, LOG_ODELAY | LOG_PID, $facility);
     }
 
-    protected function writeLog($level, $message, array $context = array()): void
+    protected function writeLog($level, string|Stringable $message, array $context = array()): void
     {
         $syslogPriority = $this->getSyslogPriority($level);
         $syslogMessage = $this->interpolate($message, $context);

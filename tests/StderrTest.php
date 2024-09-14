@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
-/**
- * @coversDefaultClass Firehed\SimpleLogger\Stderr
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(Stderr::class)]
+#[Small]
 class StderrTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
@@ -18,9 +22,6 @@ class StderrTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    /**
-     * @covers ::__construct
-     */
     public function testDefaultConstrutor(): void
     {
         $this->assertInstanceOf(Stderr::class, new Stderr());

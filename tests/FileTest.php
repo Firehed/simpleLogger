@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
-/**
- * @coversDefaultClass Firehed\SimpleLogger\File
- * @covers ::<protected>
- * @covers ::<private>
- */
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(File::class)]
+#[Small]
 class FileTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;

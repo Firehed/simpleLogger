@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
-use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel as LL;
-use stdClass;
+use Psr\Log\LoggerInterface;
 use TypeError;
+use stdClass;
 
-/**
- * @coversDefaultClass Firehed\SimpleLogger\ChainLogger
- */
+#[CoversClass(ChainLogger::class)]
+#[Small]
 class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 {
     use BaseTestTrait;
@@ -24,9 +27,6 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         return new ChainLogger();
     }
 
-    /**
-     * @covers ::__construct
-     */
     public function testLoggerInConstruct(): void
     {
         $this->assertInstanceOf(
@@ -37,9 +37,6 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @covers ::__construct
-     */
     public function testNonLoggerInConstruct(): void
     {
         $this->expectException(TypeError::class);
@@ -47,9 +44,6 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         new ChainLogger([new stdClass()]);
     }
 
-    /**
-     * @covers ::addLogger
-     */
     public function testWithOneLogger(): void
     {
         $chain = new ChainLogger();

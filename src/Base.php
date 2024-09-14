@@ -19,15 +19,15 @@ use Throwable;
  */
 abstract class Base extends AbstractLogger implements ConfigurableLoggerInterface
 {
-    private const LEVELS = [
-        LogLevel::EMERGENCY => LOG_EMERG,
-        LogLevel::ALERT     => LOG_ALERT,
-        LogLevel::CRITICAL  => LOG_CRIT,
-        LogLevel::ERROR     => LOG_ERR,
-        LogLevel::WARNING   => LOG_WARNING,
-        LogLevel::NOTICE    => LOG_NOTICE,
-        LogLevel::INFO      => LOG_INFO,
-        LogLevel::DEBUG     => LOG_DEBUG,
+    protected const LEVELS = [
+        LogLevel::EMERGENCY => \LOG_EMERG,
+        LogLevel::ALERT     => \LOG_ALERT,
+        LogLevel::CRITICAL  => \LOG_CRIT,
+        LogLevel::ERROR     => \LOG_ERR,
+        LogLevel::WARNING   => \LOG_WARNING,
+        LogLevel::NOTICE    => \LOG_NOTICE,
+        LogLevel::INFO      => \LOG_INFO,
+        LogLevel::DEBUG     => \LOG_DEBUG,
     ];
 
     private const EXCEPTION_INTREPOLATION_KEY = 'simplelogger-internal-exception-render';
@@ -111,23 +111,6 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
             throw new BadMethodCallException('Format string must contain %s');
         }
         $this->format = $format;
-    }
-
-    /**
-     * Get the syslog priority constant associated with the current level
-     */
-    public function getCurrentSyslogPriority(): int
-    {
-        return $this->getSyslogPriority($this->getLevel());
-    }
-
-    /**
-     * @param string $psrLevel PSR log level
-     * @return int LOG_ constant
-     */
-    protected function getSyslogPriority($psrLevel)
-    {
-        return self::LEVELS[$psrLevel];
     }
 
     /**

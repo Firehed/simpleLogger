@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -58,7 +58,7 @@ jobs:
 
       - name: Cache Composer packages
         id: composer-cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}-${{ matrix.php }}-${{ matrix.dep-version }}-${{ matrix.psr-log-version }}
@@ -84,5 +84,8 @@ jobs:
         run: vendor/bin/phpunit
           --coverage-clover coverage.xml
 
-      - name: Submit code coverage
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

@@ -8,6 +8,7 @@ use BadMethodCallException;
 use DateTime;
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;
+use Stringable;
 use Throwable;
 
 /**
@@ -131,16 +132,15 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * @param LogLevel::* $level
-     * @param string|\Stringable $message
      * @param array<string, mixed> $context
      */
-    abstract protected function writeLog($level, $message, array $context = []): void;
+    abstract protected function writeLog($level, string|Stringable $message, array $context = []): void;
 
     /**
      * @param LogLevel::* $level
      * @param array<string, mixed> $context
      */
-    public function log($level, $message, array $context = array()): void
+    public function log($level, string|Stringable $message, array $context = array()): void
     {
         // Directly access the array and values here rather than run through
         // getSyslogPriority to avoid the function calls in a potential hotspot

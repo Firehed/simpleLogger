@@ -20,30 +20,13 @@ jobs:
           - --prefer-lowest
           - ''
         php:
-          - '7.2'
-          - '7.3'
-          - '7.4'
-          - '8.0'
           - '8.1'
           - '8.2'
+          - '8.3'
+          - '8.4-dev'
         psr-log-version:
-          - '1.0'
           - '2.0'
           - '3.0'
-        exclude:
-          # psr/log:2.0 and 3.0 need PHP8
-          - php: '7.2'
-            psr-log-version: '2.0'
-          - php: '7.2'
-            psr-log-version: '3.0'
-          - php: '7.3'
-            psr-log-version: '2.0'
-          - php: '7.3'
-            psr-log-version: '3.0'
-          - php: '7.4'
-            psr-log-version: '2.0'
-          - php: '7.4'
-            psr-log-version: '3.0'
 
     steps:
       - name: Check out code

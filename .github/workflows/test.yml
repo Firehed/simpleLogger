@@ -84,5 +84,8 @@ jobs:
         run: vendor/bin/phpunit
           --coverage-clover coverage.xml
 
-      - name: Submit code coverage
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

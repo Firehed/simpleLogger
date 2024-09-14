@@ -19,6 +19,17 @@ use Throwable;
  */
 abstract class Base extends AbstractLogger implements ConfigurableLoggerInterface
 {
+    protected const LEVELS = [
+        LogLevel::EMERGENCY => \LOG_EMERG,
+        LogLevel::ALERT     => \LOG_ALERT,
+        LogLevel::CRITICAL  => \LOG_CRIT,
+        LogLevel::ERROR     => \LOG_ERR,
+        LogLevel::WARNING   => \LOG_WARNING,
+        LogLevel::NOTICE    => \LOG_NOTICE,
+        LogLevel::INFO      => \LOG_INFO,
+        LogLevel::DEBUG     => \LOG_DEBUG,
+    ];
+
     private const EXCEPTION_INTREPOLATION_KEY = 'simplelogger-internal-exception-render';
 
     /**

@@ -125,9 +125,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
      */
     public function log($level, string|Stringable $message, array $context = array()): void
     {
-        // Directly access the array and values here rather than run through
-        // getSyslogPriority to avoid the function calls in a potential hotspot
-        if (self::LEVELS[$level] <= self::LEVELS[$this->level]) {
+        if (LevelFilter::shouldLog(messageLevel: $level, minimumLevel: $this->level)) {
             $this->writeLog($level, $message, $context);
         }
     }

@@ -33,9 +33,11 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     /**
      * Minimum log level for the logger
      *
-     * @var    string
+     * @var LogLevel::* $level
      */
-    private $level = LogLevel::DEBUG;
+    private string $level = LogLevel::DEBUG;
+
+    public FormatterInterface $formatter;
 
     /**
      * Set minimum log level
@@ -49,11 +51,8 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * Get minimum log level
-     *
-     * @access public
-     * @return string
      */
-    public function getLevel()
+    public function getLevel(): string
     {
         return $this->level;
     }

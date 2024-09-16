@@ -161,7 +161,7 @@ Exceptions will also be rendered, in `exception_message`, `exception_type`, and 
 > ```
 >
 > over this:
-
+>
 > ```php
 > $logger->debug('Request complete in {duration} ms', ['duration' => $ms]);
 > ```

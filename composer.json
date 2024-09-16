@@ -1,11 +1,12 @@
 {
     "name": "firehed/simplelogger",
-    "description": "Logger compatible with PSR-3. Supports writing to files, STDOUT, STDERR, and syslog. Also provides a chain logger which can write to multiple destinations.",
+    "description": "Logger compatible with PSR-3. Supports writing to files, STDOUT, STDERR, and syslog. Also provides a chain logger which can write to multiple destinations. Allows customizable and pluggable formats, including logfmt.",
     "keywords": [
         "log",
         "logs",
         "logging",
         "logger",
+        "logfmt",
         "psr-3",
         "stdout",
         "stderr",

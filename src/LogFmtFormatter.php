@@ -25,6 +25,11 @@ use Stringable;
  * will be used when creating the timestamp; otherwise `new DateTimeImmutable`
  * will be how a timestamp is determined.
  *
+ * > [!IMPORTANT]
+ * > The constructor argument _order_ is not covered by backwards compatibility
+ * > rules. ALWAYS use named arguments when configuring this formatter through
+ * > the constructor.
+ *
  * @see https://brandur.org/logfmt
  */
 class LogFmtFormatter implements FormatterInterface

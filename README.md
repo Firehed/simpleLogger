@@ -150,6 +150,8 @@ The `LogFmtFormatter` will write logs in [`logfmt`](https://brandur.org/logfmt).
 By default, the `msg`, `level`, and `ts` keys will be set, and any values in `context` that are not interpolated will be added as additional key/value pairs.
 Exceptions will also be rendered, in `exception_message`, `exception_type`, and `exception_stacktrace` per [OTel conventions](https://opentelemetry.io/docs/specs/semconv/exceptions/exceptions-logs/).
 
+Any values that resolve to empty strings, or cannot be cast to a string (arrays, objects without `__toString()`) will be removed.
+
 > [!TIP]
 > Any interpolated values from context will _not_ be put in the key/value pairs.
 > To make the most out of structured log formats such as logfmt, limit interpolation keys in the coded message.

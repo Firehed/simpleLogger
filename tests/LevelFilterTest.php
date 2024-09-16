@@ -27,7 +27,14 @@ class LevelFilterTest extends TestCase
             'debug on debug' => [LogLevel::DEBUG, LogLevel::DEBUG, true],
             'debug on info' => [LogLevel::DEBUG, LogLevel::INFO, false],
             'info on info' => [LogLevel::INFO, LogLevel::INFO, true],
-
+            // Filtering "lower"
+            'emergency filters alert' => [LogLevel::ALERT, LogLevel::EMERGENCY, false],
+            'alert filters critical' =>  [LogLevel::CRITICAL, LogLevel::ALERT, false],
+            'critical filters error' => [LogLevel::ERROR, LogLevel::CRITICAL, false],
+            'error filters warning' => [LogLevel::WARNING, LogLevel::ERROR, false],
+            'warning filters notice' => [LogLevel::NOTICE, LogLevel::WARNING, false],
+            'notice filters info' => [LogLevel::INFO, LogLevel::NOTICE, false],
+            'info filters debug' => [LogLevel::DEBUG, LogLevel::INFO, false],
         ];
     }
 

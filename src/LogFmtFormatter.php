@@ -38,6 +38,10 @@ use const JSON_UNESCAPED_SLASHES;
  * will be used when creating the timestamp; otherwise `new DateTimeImmutable`
  * will be how a timestamp is determined.
  *
+ * Empty string values, _including message_, will be omitted. Values that
+ * cannot be reasonably coerced to strings (arrays, objects that are not
+ * Stringable) will also be omitted.
+ *
  * > [!IMPORTANT]
  * > The constructor argument _order_ is not covered by backwards compatibility
  * > rules. ALWAYS use named arguments when configuring this formatter through
@@ -129,6 +133,10 @@ class LogFmtFormatter implements FormatterInterface
                 // this clearly, just to be "as [lenient] as possible".
                 return null;
             }
+        }
+
+        if ($value === '') {
+            return null;
         }
 
         $needsEscaping = false;

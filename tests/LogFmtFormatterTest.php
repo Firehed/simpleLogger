@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 #[CoversClass(LogFmtFormatter::class)]
 #[Small]
@@ -45,5 +46,40 @@ class LogFmtFormatterTest extends TestCase
             'channel' => 'paper',
         ]);
         self::assertSame('msg="Bad news happened" channel=paper', $msg);
+    }
+
+    public function testValueCoercion(): void
+    {
+        $good = new class {
+            public function __toString(): string
+            {
+                return 'good';
+            }
+        };
+        $bad = new stdClass();
+
+        $lf = new LogFmtFormatter(
+            levelKey: null,
+            timestampKey: null,
+        );
+        $message = $lf->format('notice', '', [
+            'a' => 'b',
+            'duration_ms' => 42,
+            'worked' => true,
+            'failed' => false,
+            'stringy' => $good,
+            'not_stringy' => $bad,
+            'skip' => [],
+        ]);
+
+        self::assertStringContainsString('a=b', $message);
+        self::assertStringContainsString('duration_ms=42', $message);
+        self::assertStringContainsString('worked=true', $message);
+        self::assertStringContainsString('failed=false', $message);
+        self::assertStringContainsString('stringy=good', $message);
+
+        self::assertStringNotContainsString('not_stringy=', $message);
+        self::assertStringNotContainsString('skip=', $message);
+        self::assertStringNotContainsString('msg=', $message);
     }
 }

@@ -20,14 +20,20 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     use LogLevelsTrait;
 
     private Base $logger;
+    private FormatterInterface&MockObject $formatter;
 
     public function setUp(): void
     {
-        $this->logger = new class extends Base {
-            public bool $wrote = false;
-            protected function writeLog($level, mixed $message, $context = []): void
+        $this->formatter = self::createMock(FormatterInterface::class);
+        $this->logger = new class ($this->formatter) extends Base {
+            public ?string $written = null;
+            public function __construct(FormatterInterface $formatter)
             {
-                $this->wrote = true;
+                $this->formatter = $formatter;
+            }
+            protected function write(string $level, string $message): void
+            {
+                $this->written = $message;
             }
         };
     }
@@ -44,7 +50,18 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(LL::EMERGENCY, $this->logger->getLevel());
     }
 
+    public function testFormatterIsApplied(): void
+    {
+        $this->formatter->expects(self::once())
+            ->method('format')
+            ->with(LL::NOTICE, 'message', ['a' => 'b'])
+            ->willReturn('msg=message a=b');
+        $this->logger->notice('message', ['a' => 'b']);
+        self::assertSame('msg=message a=b', $this->logger->written); // @phpstan-ignore-line
+    }
+
     /**
+     * @param LL::* $atLevel
      * @param array<LL::*> $shouldLog Levels which should be logged
      */
     #[DataProvider('levelFiltering')]
@@ -53,38 +70,20 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->logger->setLevel($atLevel);
         foreach (self::allLevels() as $levelDP) {
             list($level) = $levelDP;
-            $this->logger->wrote = false; // @phpstan-ignore-line
+            $this->logger->written = null; // @phpstan-ignore-line
             $this->logger->log($level, 'someMessage');
             if (in_array($level, $shouldLog)) {
-                $this->assertTrue(
-                    $this->logger->wrote, // @phpstan-ignore-line
+                $this->assertNotNull(
+                    $this->logger->written, // @phpstan-ignore-line
                     "$level should have logged at $atLevel but did not"
                 );
             } else {
-                $this->assertFalse(
-                    $this->logger->wrote, // @phpstan-ignore-line
+                $this->assertNull(
+                    $this->logger->written, // @phpstan-ignore-line
                     "$level should not have logged at $atLevel but did"
                 );
             }
         }
-    }
-
-    public function testSetFormat(): void
-    {
-        // @phpstan-ignore-next-line
-        $this->assertNull($this->logger->setFormat('[{level}] %s'));
-    }
-
-    public function testSetDateFormat(): void
-    {
-        // @phpstan-ignore-next-line
-        $this->assertNull($this->logger->setDateFormat('%Y-%m-%d'));
-    }
-
-    public function testSetFormatFailsIfPlaceholderIsMissing(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->logger->setFormat('[{level}] oops no percent s');
     }
 
     /**
@@ -125,23 +124,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
                 LL::DEBUG,
                 [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO, LL::DEBUG]
             ],
-        ];
-    }
-
-    /**
-     * @return array<string|int>[]
-     */
-    public function syslogMap(): array
-    {
-        return [
-            [LL::EMERGENCY, LOG_EMERG],
-            [LL::ALERT, LOG_ALERT],
-            [LL::CRITICAL, LOG_CRIT],
-            [LL::ERROR, LOG_ERR],
-            [LL::WARNING, LOG_WARNING],
-            [LL::NOTICE, LOG_NOTICE],
-            [LL::INFO, LOG_INFO],
-            [LL::DEBUG, LOG_DEBUG],
         ];
     }
 }

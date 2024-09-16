@@ -12,8 +12,8 @@ namespace Firehed\SimpleLogger;
  */
 class Stderr extends File
 {
-    public function __construct()
+    public function __construct(FormatterInterface $formatter = new DefaultFormatter())
     {
-        parent::__construct('php://stderr');
+        parent::__construct('php://stderr', $formatter);
     }
 }

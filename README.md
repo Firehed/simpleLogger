@@ -4,7 +4,7 @@ SimpleLogger
 [![Test](https://github.com/Firehed/simpleLogger/workflows/Test/badge.svg)](https://github.com/Firehed/simpleLogger/actions?query=workflow%3ATest)
 [![Lint](https://github.com/Firehed/simpleLogger/workflows/Lint/badge.svg)](https://github.com/Firehed/simpleLogger/actions?query=workflow%3ALint)
 [![Static analysis](https://github.com/Firehed/simpleLogger/workflows/Static%20analysis/badge.svg)](https://github.com/Firehed/simpleLogger/actions?query=workflow%3A%22Static+analysis%22)
-[![codecov](https://codecov.io/gh/Firehed/simpleLogger/branch/master/graph/badge.svg)](https://codecov.io/gh/Firehed/simpleLogger)
+[![codecov](https://codecov.io/gh/Firehed/simpleLogger/branch/main/graph/badge.svg)](https://codecov.io/gh/Firehed/simpleLogger)
 
 SimpleLogger is a PHP library to write logs.
 It has simple, straightforward defaults with additional customization hooks.

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Firehed\SimpleLogger;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * This interface is only intended to be checked by user code. It is not
@@ -13,9 +14,8 @@ use Psr\Log\LoggerInterface;
  */
 interface ConfigurableLoggerInterface extends LoggerInterface
 {
-    public function setFormat(string $format): void;
-
+    /**
+     * @param LogLevel::* $level
+     */
     public function setLevel(string $level): void;
-
-    public function setRenderExceptions(bool $render): void;
 }

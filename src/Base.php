@@ -11,7 +11,7 @@ use Psr\Log\LogLevel;
 use Stringable;
 use Throwable;
 
-abstract class Base extends AbstractLogger
+abstract class Base extends AbstractLogger implements ConfigurableLoggerInterface
 {
     /**
      * Minimum log level for the logger

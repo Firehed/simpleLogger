@@ -158,14 +158,14 @@ Exceptions will also be rendered, in `exception_message`, `exception_type`, and 
 >
 > ```php
 > $logger->debug('Request complete', ['duration_ms' => $ms]);
-> // produces `msg="Request complete" duration_ms=42
+> // produces `msg="Request complete" duration_ms=42`
 > ```
 >
 > over this:
 >
 > ```php
 > $logger->debug('Request complete in {duration} ms', ['duration' => $ms]);
-> // produces `msg="Request complete in 42 ms"
+> // produces `msg="Request complete in 42 ms"`
 > ```
 
 #### Custom `FormatterInterface`

@@ -28,5 +28,8 @@ BC Breaks:
   The logic for these has been moved to the formatters.
   Only `setLevel` remains.
 
+- `Base`'s `writeLog` method has been replaced by `write`, which now receives the already-formatted message and no context.
+  This will only matter if you've directly extended `Base` rather than using one of the packaged implementations.
+
 - Minor: appending newlines to log message is done only in the file-based loggers instead of the root-level formatting tools.
   This should have no effect on most installations, but may subtly change results of `syslog` loggers.

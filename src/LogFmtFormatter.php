@@ -34,6 +34,13 @@ use Stringable;
  */
 class LogFmtFormatter implements FormatterInterface
 {
+    // LogFmt doesn't really define what needs escaping, so this aims to
+    // provide a sensible start.
+    //
+    // The order is intended to keep more likely characters first to
+    // early-abort the detection loop.
+    private const ESCAPED_CHARACTERS = [' ', '"', "\n", "\r", "\t"];
+
     public function __construct(
         private readonly string $messageKey = 'msg',
         private readonly ?string $levelKey = 'level',
@@ -48,7 +55,8 @@ class LogFmtFormatter implements FormatterInterface
         // Stringable to string
         $message = (string)$message;
 
-        // Interpolate message normally
+        // Interpolate message normally, removing interpolated values from the
+        // context to be used as k/v pairs
         $pairs = [];
         foreach ($context as $key => $value) {
             $from = '{' . $key . '}';
@@ -84,19 +92,45 @@ class LogFmtFormatter implements FormatterInterface
 
         $formattedPairs = [];
         foreach ($pairs as $key => $value) {
-            if (!is_string($value)) {
-                $value = var_export($value, true);
+            $escaped = $this->escape($value);
+            if ($escaped !== null) {
+                $formattedPairs[] = sprintf('%s=%s', $key, $escaped);
             }
-            $hasSpaces = str_contains(needle: ' ', haystack: $value);
-            $hasQuotes = str_contains(needle: '"', haystack: $value);
-            if ($hasSpaces || $hasQuotes) {
-                $escapedValue = json_encode($value, JSON_UNESCAPED_SLASHES);
-            } else {
-                $escapedValue = $value;
-            }
-            $formattedPairs[] = sprintf('%s=%s', $key, $escapedValue);
         }
 
         return implode(' ', $formattedPairs);
+    }
+
+    private function escape(mixed $value): ?string
+    {
+        if (!is_string($value)) {
+            if (is_scalar($value)) {
+                // Bool/int/float ~ short-circuit additional checks
+                return var_export($value, true);
+            } elseif ($value instanceof Stringable) {
+                $value = (string)$value;
+            } else {
+                // Array or non-stringable object. The PSR spec doesn't define
+                // this clearly, just to be "as [lenient] as possible".
+                return null;
+            }
+        }
+
+        $needsEscaping = false;
+        foreach (self::ESCAPED_CHARACTERS as $character) {
+            if (str_contains(needle: $character, haystack: $value)) {
+                $needsEscaping = true;
+                break;
+            }
+        }
+
+        if ($needsEscaping) {
+            // Logfmt doesn't seem to really specify escaping in any real
+            // detail, but in practice this seems to work.
+            return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+        } else {
+            // Single-word strings don't get quoted
+            return $value;
+        }
     }
 }

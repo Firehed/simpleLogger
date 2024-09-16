@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
+use Psr\Log\LogLevel;
 use Stringable;
 
 interface FormatterInterface

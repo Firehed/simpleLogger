@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
-use Psr\Log\AbstractLogger;
 use Stringable;
 
-class LogFmt extends AbstractLogger
+/**
+ * Uses the `logfmt` format when writing logs.
+ *
+ * Any entries in `context` that are not interpolated into the message are
+ * added as additional key/value pairs in the output.
+ *
+ * @see https://brandur.org/logfmt
+ */
+class LogFmtFormatter implements FormatterInterface
 {
-    public function __construct(private ConfigurableLoggerInterface $writer)
-    {
-        $writer->setFormat('%s');
-        $writer->setRenderExceptions(false); // We will self-manage this
-    }
-
-    public function log($level, string|Stringable $message, array $context = []): void
+    public function format(string $level, string|Stringable $message, array $context = []): string
     {
         // Stringable to string
         if (!is_string($message)) {
@@ -63,8 +64,6 @@ class LogFmt extends AbstractLogger
             $formattedPairs[] = sprintf('%s=%s', $key, $escapedValue);
         }
 
-        $final = implode(' ', $formattedPairs);
-
-        $this->writer->log($level, $final);
+        return implode(' ', $formattedPairs);
     }
 }

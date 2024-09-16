@@ -51,7 +51,7 @@ class DefaultFormatter implements FormatterInterface
         return sprintf(
             $this->interpolate($this->format, $formatData),
             $this->interpolate($message, $context)
-        ) . PHP_EOL;
+        );
     }
 
     /**

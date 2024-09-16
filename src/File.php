@@ -37,7 +37,7 @@ class File extends Base
         if ($this->lock) {
             flock($this->fh, LOCK_EX);
         }
-        if (fwrite($this->fh, $message) === false) {
+        if (fwrite($this->fh, $message . \PHP_EOL) === false) {
             throw new RuntimeException('Unable to write to the log file.');
         }
         if ($this->lock) {

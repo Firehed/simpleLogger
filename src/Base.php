@@ -53,9 +53,8 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * @param LogLevel::* $level
-     * @param array<string, mixed> $context
      */
-    abstract protected function writeLog($level, string|Stringable $message, array $context = []): void;
+    abstract protected function write(string $level, string $message): void;
 
     /**
      * @param LogLevel::* $level
@@ -66,7 +65,8 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
         // Directly access the array and values here rather than run through
         // getSyslogPriority to avoid the function calls in a potential hotspot
         if (self::LEVELS[$level] <= self::LEVELS[$this->level]) {
-            $this->writeLog($level, $message, $context);
+            $formatted = $this->formatter->format($level, $message, $context);
+            $this->write($level, $formatted);
         }
     }
 }

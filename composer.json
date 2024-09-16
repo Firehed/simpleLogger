@@ -41,9 +41,11 @@
         "psr/log": "^2.0 || ^3.0"
     },
     "require-dev": {
+        "firehed/clock": "^1.0",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-phpunit": "^1.4",
         "phpunit/phpunit": "^10 || ^11",
+        "psr/clock": "^1.0",
         "squizlabs/php_codesniffer": "^3.10"
     },
     "conflict": {

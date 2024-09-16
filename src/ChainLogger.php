@@ -13,9 +13,9 @@ class ChainLogger extends AbstractLogger
 {
     /**
      * @param LoggerInterface[] $loggers
-     * @param LogLevel::*|null $logLevel
+     * @param LogLevel::*|null $level
      */
-    public function __construct(private array $loggers = [], public ?string $logLevel = null)
+    public function __construct(private array $loggers = [], public ?string $level = null)
     {
     }
 
@@ -27,8 +27,14 @@ class ChainLogger extends AbstractLogger
         $this->loggers[] = $logger;
     }
 
+    /**
+     * @param LogLevel::* $level
+     */
     public function log($level, string|\Stringable $message, array $context = []): void
     {
+        if (!LevelFilter::shouldLog(messageLevel: $level, minimumLevel: $this->level)) {
+            return;
+        }
 
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);

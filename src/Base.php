@@ -42,7 +42,7 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
     /**
      * Set minimum log level
      *
-     * @param  string  $level
+     * @param LogLevel::* $level
      */
     public function setLevel(string $level): void
     {

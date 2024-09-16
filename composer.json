@@ -1,11 +1,12 @@
 {
     "name": "firehed/simplelogger",
-    "description": "Logger compatible with PSR-3. Supports writing to files, STDOUT, STDERR, and syslog. Also provides a chain logger which can write to multiple destinations.",
+    "description": "Logger compatible with PSR-3. Supports writing to files, STDOUT, STDERR, and syslog. Also provides a chain logger which can write to multiple destinations. Allows customizable and pluggable formats, including logfmt.",
     "keywords": [
         "log",
         "logs",
         "logging",
         "logger",
+        "logfmt",
         "psr-3",
         "stdout",
         "stderr",
@@ -41,9 +42,11 @@
         "psr/log": "^2.0 || ^3.0"
     },
     "require-dev": {
+        "firehed/clock": "^1.0",
         "phpstan/phpstan": "^1.12",
         "phpstan/phpstan-phpunit": "^1.4",
         "phpunit/phpunit": "^10 || ^11",
+        "psr/clock": "^1.0",
         "squizlabs/php_codesniffer": "^3.10"
     },
     "conflict": {

@@ -126,21 +126,4 @@ class BaseTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
-
-    /**
-     * @return array<string|int>[]
-     */
-    public function syslogMap(): array
-    {
-        return [
-            [LL::EMERGENCY, LOG_EMERG],
-            [LL::ALERT, LOG_ALERT],
-            [LL::CRITICAL, LOG_CRIT],
-            [LL::ERROR, LOG_ERR],
-            [LL::WARNING, LOG_WARNING],
-            [LL::NOTICE, LOG_NOTICE],
-            [LL::INFO, LOG_INFO],
-            [LL::DEBUG, LOG_DEBUG],
-        ];
-    }
 }

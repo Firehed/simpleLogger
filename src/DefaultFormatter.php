@@ -21,17 +21,13 @@ class DefaultFormatter implements FormatterInterface
 
     /**
      * The complete log message format, including prefixes.
-     *
-     * @var string
      */
-    private $format = '[{date}] [{level}] %s';
+    private string $format = '[{date}] [{level}] %s';
 
     /**
      * Whether to render exceptions in context automatically
-     *
-     * @var bool
      */
-    private $renderExceptions = false;
+    private bool $renderExceptions = false;
 
     public function format(string $level, string|Stringable $message, array $context = []): string
     {

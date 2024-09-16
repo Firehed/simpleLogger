@@ -7,14 +7,12 @@ SimpleLogger
 [![codecov](https://codecov.io/gh/Firehed/simpleLogger/branch/master/graph/badge.svg)](https://codecov.io/gh/Firehed/simpleLogger)
 
 SimpleLogger is a PHP library to write logs.
+It has simple, straightforward defaults with additional customization hooks.
 
 - Drivers: Syslog, stdout, stderr and text file
 - Compatible with [PSR-3 Standard Logger Interface](http://www.php-fig.org/psr/psr-3/)
-- Requirements: PHP >= 7.2 (older versions may work, but are not tested)
-- Author: Frédéric Guillot, Eric Stern
+- Requirements: PHP >= 8.1
 - License: MIT
-
-This is a fork from Frédéric Guillot's original SimpleLogger package, which has since been abandoned. I intend to actively maintain this as needed.
 
 Usage
 -----
@@ -44,22 +42,7 @@ $logger->error('foobar');
 $logger->error('Error at {filename} at line {line}', ['filename' => __FILE__, 'line' => __LINE__]);
 ```
 
-### Stdout
-
-```php
-$logger = new \Firehed\SimpleLogger\Stdout();
-$logger->error('foobar');
-```
-
-### Stderr
-
-```php
-$logger = new \Firehed\SimpleLogger\Stderr();
-$logger->info('foobar');
-```
-
-### Text file
-
+### Files
 Send log messages to a text file:
 
 ```php
@@ -74,26 +57,19 @@ $logger = new Firehed\SimpleLogger\File('/tmp/simplelogger.log');
 $logger->info('foobar');
 
 // Output to the file: "[2013-06-02 16:03:28] [error] Error at /Users/fred/Devel/libraries/simpleLogger/example.php at line 24"
-$logger->error('Error at {filename} at line {line}', array('filename' => __FILE__, 'line' => __LINE__));
+$logger->error('Error at {filename} at line {line}', ['filename' => __FILE__, 'line' => __LINE__]);
 ```
 
-### Multiple loggers
-
-Send log messages to multiple loggers:
+#### Stdout and Stderr
 
 ```php
-<?php
-
-require 'vendor/autoload.php';
-
-$logger = new Firehed\SimpleLogger\ChainLogger;
-$logger->addLogger(new Firehed\SimpleLogger\Syslog('myapp'));
-$logger->addLogger(new Firehed\SimpleLogger\File('/tmp/simplelogger.log'));
-
-$logger->info('my message');
-$logger->error('my error message');
-$logger->error('my error message with a {variable}', ['variable' => 'test']);
+$logger = new \Firehed\SimpleLogger\Stdout();
+// or
+$logger = new \Firehed\SimpleLogger\Stderr();
 ```
+
+These loggers will write to STDOUT or STDERR; i.e. `php://stdout` or `php://stderr`.
+Stdout is very commonly used for Docker and/or Kubernetes.
 
 ### Minimum log level for loggers
 
@@ -109,18 +85,15 @@ $syslog->setLevel(Psr\Log\LogLevel::ERROR);  // Define the minimum log level
 
 $file = new Firehed\SimpleLogger\File('/tmp/simplelogger.log');
 
-$logger = new Firehed\SimpleLogger\ChainLogger;
-$logger->addLogger($syslog);
-$logger->addLogger($file);
-
+$logger = new Firehed\SimpleLogger\ChainLogger([$syslog, $file]);
 $logger->debug('debug info sent only to the text file');
 $logger->error('my error message');
-$logger->error('my error message with a {variable}', array('variable' => 'test'));
+$logger->error('my error message with a {variable}', ['variable' => 'test']);
 ```
 
 The minimum log level is `LogLevel::DEBUG` by default.
 
-### Formatting
+## Formatting
 
 Starting in 3.0.0, message format customization can be accomplished in several ways:
 
@@ -128,7 +101,7 @@ Starting in 3.0.0, message format customization can be accomplished in several w
 - Use a different bundled formatter, such as `LogFmtFormatter`
 - Create a class that implements `FormatterInterface` and pass that to your logger's constructor
 
-#### `DefaultFormatter`
+### `DefaultFormatter`
 
 The format provided MUST include `%s`, which is where the actual interpolated message will be placed.
 Formats MAY include `{date}` and/or `{level}`, which are placeholders for the timestamp and log level respectively.
@@ -144,7 +117,7 @@ The date defaults to ATOM format, but can also be customized via `setDateFormat(
 By default, this will ignore `exception` keys and perform normal message interpolation.
 By calling `setRenderExceptions(true)`, the equivalent of `(string) $context['exception']` will be appended to the log message if that key is set, so long as that value is `Throwable`.
 
-#### LogFmt
+### LogFmt
 
 The `LogFmtFormatter` will write logs in [`logfmt`](https://brandur.org/logfmt).
 By default, the `msg`, `level`, and `ts` keys will be set, and any values in `context` that are not interpolated will be added as additional key/value pairs.
@@ -170,8 +143,33 @@ Any values that resolve to empty strings, or cannot be cast to a string (arrays,
 > // produces `msg="Request complete in 42 ms"`
 > ```
 
-#### Custom `FormatterInterface`
+### Custom `FormatterInterface`
 
 If you need deeper customization, such as log enrichment or more major format shifts, a custom `FormatterInterface` is the way to go.
 Doing so requires your own interpolation logic, as well as any other message enrichment or formatting.
 You'll be passed the same (unmodified) parameters as `LoggerInterface::log()` gets, and are responsible for transforming these values into a string.
+
+## Sending to multiple loggers
+
+Send log messages to multiple PSR-3 loggers with `ChainLogger()`:
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Firehed\SimpleLogger as SL;
+
+$logger = new SL\ChainLogger([new SL\StdErr()]);
+$logger->addLogger(new SL\Syslog('myapp'));
+$logger->addLogger(new SL\File('/tmp/simplelogger.log'));
+
+$logger->info('my message');
+$logger->error('my error message');
+$logger->error('my error message with a {variable}', ['variable' => 'test']);
+```
+
+The `ChainLogger` supports a log level, in addition to loggers it relays to.
+This is configuable _only_ by a constructor parameter.
+If a log entry is less severe than the configured level, _none_ of the loggers in the chain will receive the message.
+Those loggers may opt to do additional filtering.

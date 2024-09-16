@@ -25,7 +25,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->logger = new class extends Base {
             public bool $wrote = false;
-            protected function writeLog($level, mixed $message, $context = []): void
+            protected function write(string $level, string $message): void
             {
                 $this->wrote = true;
             }
@@ -45,6 +45,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param LL::* $atLevel
      * @param array<LL::*> $shouldLog Levels which should be logged
      */
     #[DataProvider('levelFiltering')]
@@ -67,24 +68,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
                 );
             }
         }
-    }
-
-    public function testSetFormat(): void
-    {
-        // @phpstan-ignore-next-line
-        $this->assertNull($this->logger->setFormat('[{level}] %s'));
-    }
-
-    public function testSetDateFormat(): void
-    {
-        // @phpstan-ignore-next-line
-        $this->assertNull($this->logger->setDateFormat('%Y-%m-%d'));
-    }
-
-    public function testSetFormatFailsIfPlaceholderIsMissing(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->logger->setFormat('[{level}] oops no percent s');
     }
 
     /**

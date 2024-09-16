@@ -7,12 +7,6 @@ namespace Firehed\SimpleLogger;
 use RuntimeException;
 use Stringable;
 
-/**
- * File logger
- *
- * @package SimpleLogger
- * @author  Frédéric Guillot
- */
 class File extends Base
 {
     /**
@@ -20,10 +14,7 @@ class File extends Base
      */
     protected $fh;
 
-    /**
-     * @var bool
-     */
-    private $lock = false;
+    private bool $lock = false;
 
     /**
      * Setup logger configuration
@@ -40,14 +31,12 @@ class File extends Base
         $this->fh = $fh;
     }
 
-    protected function writeLog($level, string|Stringable $message, array $context = array()): void
+    protected function write($level, string $message): void
     {
-        $line = $this->formatMessage($level, $message, $context);
-
         if ($this->lock) {
             flock($this->fh, LOCK_EX);
         }
-        if (fwrite($this->fh, $line) === false) {
+        if (fwrite($this->fh, $message) === false) {
             throw new RuntimeException('Unable to write to the log file.');
         }
         if ($this->lock) {

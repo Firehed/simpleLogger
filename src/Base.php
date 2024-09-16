@@ -11,7 +11,7 @@ use Psr\Log\LogLevel;
 use Stringable;
 use Throwable;
 
-abstract class Base extends AbstractLogger implements ConfigurableLoggerInterface
+abstract class Base extends AbstractLogger
 {
     protected const LEVELS = [
         LogLevel::EMERGENCY => \LOG_EMERG,

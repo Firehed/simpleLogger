@@ -25,8 +25,8 @@ BC Breaks:
 - `getCurrentSyslogPriority()` has been removed without replacement.
 
 - `setFormat` and `setRenderExceptions` has been removed from `ConfigurableLoggerInterface` and all implementations.
-  The logic for these has been moved to the formatters.
   Only `setLevel` remains.
+  These methods now exist on `DefaultFormatter`, but not the broader `FormatterInterface`.
 
 - `Base`'s `writeLog` method has been replaced by `write`, which now receives the already-formatted message and no context.
   This will only matter if you've directly extended `Base` rather than using one of the packaged implementations.

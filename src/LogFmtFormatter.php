@@ -10,12 +10,20 @@ use Stringable;
  * Uses the `logfmt` format when writing logs.
  *
  * Any entries in `context` that are not interpolated into the message are
- * added as additional key/value pairs in the output.
+ * added as additional key/value pairs in the output. Given the nature of
+ * `logfmt`, it's generally preferable to minimize interpolated values in favor
+ * of strucured k/v pairs, but that's your call.
  *
  * @see https://brandur.org/logfmt
  */
 class LogFmtFormatter implements FormatterInterface
 {
+    public function __construct(
+        private readonly string $messageKey = 'msg',
+        private readonly string $levelKey = 'level',
+    ) {
+    }
+
     public function format(string $level, string|Stringable $message, array $context = []): string
     {
         // Stringable to string
@@ -37,8 +45,8 @@ class LogFmtFormatter implements FormatterInterface
 
         // Prepare second-pass encoding
         $pairs = $context;
-        $pairs['msg'] = $formattedMessage;
-        $pairs['level'] = $level;
+        $pairs[$this->messageKey] = $formattedMessage;
+        $pairs[$this->levelKey] = $level;
 
         // AFTER interpolating, read out exception if present and munge it into
         // new context.

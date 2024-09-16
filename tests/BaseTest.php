@@ -19,20 +19,17 @@ class BaseTest extends \PHPUnit\Framework\TestCase
 {
     use LogLevelsTrait;
 
-    /** @var Base | \PHPUnit\Framework\MockObject\MockObject */
-    private $logger;
-
-    /** @var bool */
-    private $wrote = false;
+    private Base $logger;
 
     public function setUp(): void
     {
-        $this->logger = $this->getMockForAbstractClass(Base::class);
-
-        $this->logger->method('writeLog')
-            ->willReturnCallback(function () {
+        $this->logger = new class extends Base {
+            public bool $wrote = false;
+            protected function writeLog($level, mixed $message, $context = []): void
+            {
                 $this->wrote = true;
-            });
+            }
+        };
     }
 
     public function testDefaultLevelIsDebug(): void
@@ -56,16 +53,16 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->logger->setLevel($atLevel);
         foreach (self::allLevels() as $levelDP) {
             list($level) = $levelDP;
-            $this->wrote = false;
+            $this->logger->wrote = false; // @phpstan-ignore-line
             $this->logger->log($level, 'someMessage');
             if (in_array($level, $shouldLog)) {
                 $this->assertTrue(
-                    $this->wrote,
+                    $this->logger->wrote, // @phpstan-ignore-line
                     "$level should have logged at $atLevel but did not"
                 );
             } else {
                 $this->assertFalse(
-                    $this->wrote,
+                    $this->logger->wrote, // @phpstan-ignore-line
                     "$level should not have logged at $atLevel but did"
                 );
             }

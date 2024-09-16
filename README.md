@@ -146,7 +146,7 @@ By calling `setRenderExceptions(true)`, the equivalent of `(string) $context['ex
 
 #### LogFmt
 
-The `LogFmtFormatter` will write logs in `lgtfmt`(https://brandur.org/logfmt).
+The `LogFmtFormatter` will write logs in [`logfmt`](https://brandur.org/logfmt).
 By default, the `msg`, `level`, and `ts` keys will be set, and any values in `context` that are not interpolated will be added as additional key/value pairs.
 Exceptions will also be rendered, in `exception_message`, `exception_type`, and `exception_stacktrace` per [OTel conventions](https://opentelemetry.io/docs/specs/semconv/exceptions/exceptions-logs/).
 

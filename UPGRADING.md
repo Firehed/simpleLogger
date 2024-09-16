@@ -27,3 +27,6 @@ BC Breaks:
 - `setFormat` and `setRenderExceptions` has been removed from `ConfigurableLoggerInterface` and all implementations.
   The logic for these has been moved to the formatters.
   Only `setLevel` remains.
+
+- Minor: appending newlines to log message is done only in the file-based loggers instead of the root-level formatting tools.
+  This should have no effect on most installations, but may subtly change results of `syslog` loggers.

@@ -9,6 +9,17 @@ use Stringable;
 
 class Syslog extends Base
 {
+    protected const LEVELS = [
+        LogLevel::EMERGENCY => \LOG_EMERG,
+        LogLevel::ALERT     => \LOG_ALERT,
+        LogLevel::CRITICAL  => \LOG_CRIT,
+        LogLevel::ERROR     => \LOG_ERR,
+        LogLevel::WARNING   => \LOG_WARNING,
+        LogLevel::NOTICE    => \LOG_NOTICE,
+        LogLevel::INFO      => \LOG_INFO,
+        LogLevel::DEBUG     => \LOG_DEBUG,
+    ];
+
     /**
      * Setup Syslog configuration
      *
@@ -20,12 +31,11 @@ class Syslog extends Base
         openlog($ident, LOG_ODELAY | LOG_PID, $facility);
     }
 
-    protected function writeLog($level, string|Stringable $message, array $context = []): void
+    protected function write($level, string $message): void
     {
         $syslogPriority = $this->getSyslogPriority($level);
-        $syslogMessage = $this->interpolate($message, $context);
 
-        syslog($syslogPriority, $syslogMessage);
+        syslog($syslogPriority, $message);
     }
 
     protected function getSyslogPriority(string $psrLevel): int

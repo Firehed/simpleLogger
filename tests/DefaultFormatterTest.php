@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
+use RuntimeException;
 
 #[CoversClass(DefaultFormatter::class)]
 #[Small]
@@ -41,5 +42,15 @@ class DefaultFormatterTest extends TestCase
     {
         $this->expectException(LogicException::class);
         $this->formatter->setFormat('[{level}] oops no percent s');
+    }
+
+    public function testExceptionRendering(): void
+    {
+        $this->formatter->setRenderExceptions(true);
+        $ex = new RuntimeException('test message');
+        $formatted = $this->formatter->format(LogLevel::ERROR, '', ['exception' => $ex]);
+        self::assertStringContainsString('[error]', $formatted);
+        self::assertStringContainsString('RuntimeException: test message', $formatted);
+        self::assertStringContainsString('Stack trace:', $formatted);
     }
 }

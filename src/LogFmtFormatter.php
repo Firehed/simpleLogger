@@ -8,6 +8,19 @@ use DateTimeImmutable;
 use Psr\Clock\ClockInterface;
 use Stringable;
 
+use function array_key_exists;
+use function array_merge;
+use function assert;
+use function implode;
+use function is_scalar;
+use function is_string;
+use function json_encode;
+use function str_contains;
+use function var_export;
+
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+
 /**
  * Uses the `logfmt` format when writing logs.
  *

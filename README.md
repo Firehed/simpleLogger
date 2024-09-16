@@ -10,11 +10,8 @@ SimpleLogger is a PHP library to write logs.
 
 - Drivers: Syslog, stdout, stderr and text file
 - Compatible with [PSR-3 Standard Logger Interface](http://www.php-fig.org/psr/psr-3/)
-- Requirements: PHP >= 7.2 (older versions may work, but are not tested)
-- Author: Frédéric Guillot, Eric Stern
+- Requirements: PHP >= 8.1
 - License: MIT
-
-This is a fork from Frédéric Guillot's original SimpleLogger package, which has since been abandoned. I intend to actively maintain this as needed.
 
 Usage
 -----
@@ -120,7 +117,7 @@ $logger->error('my error message with a {variable}', array('variable' => 'test')
 
 The minimum log level is `LogLevel::DEBUG` by default.
 
-### Formatting
+## Formatting
 
 Starting in 3.0.0, message format customization can be accomplished in several ways:
 
@@ -128,7 +125,7 @@ Starting in 3.0.0, message format customization can be accomplished in several w
 - Use a different bundled formatter, such as `LogFmtFormatter`
 - Create a class that implements `FormatterInterface` and pass that to your logger's constructor
 
-#### `DefaultFormatter`
+### `DefaultFormatter`
 
 The format provided MUST include `%s`, which is where the actual interpolated message will be placed.
 Formats MAY include `{date}` and/or `{level}`, which are placeholders for the timestamp and log level respectively.
@@ -144,7 +141,7 @@ The date defaults to ATOM format, but can also be customized via `setDateFormat(
 By default, this will ignore `exception` keys and perform normal message interpolation.
 By calling `setRenderExceptions(true)`, the equivalent of `(string) $context['exception']` will be appended to the log message if that key is set, so long as that value is `Throwable`.
 
-#### LogFmt
+### LogFmt
 
 The `LogFmtFormatter` will write logs in [`logfmt`](https://brandur.org/logfmt).
 By default, the `msg`, `level`, and `ts` keys will be set, and any values in `context` that are not interpolated will be added as additional key/value pairs.
@@ -170,7 +167,7 @@ Any values that resolve to empty strings, or cannot be cast to a string (arrays,
 > // produces `msg="Request complete in 42 ms"`
 > ```
 
-#### Custom `FormatterInterface`
+### Custom `FormatterInterface`
 
 If you need deeper customization, such as log enrichment or more major format shifts, a custom `FormatterInterface` is the way to go.
 Doing so requires your own interpolation logic, as well as any other message enrichment or formatting.

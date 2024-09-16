@@ -26,8 +26,12 @@ class Syslog extends Base
      * @param $ident Application name
      * @param  int    $facility See http://php.net/manual/en/function.openlog.php
      */
-    public function __construct(string $ident = 'PHP', int $facility = LOG_USER)
-    {
+    public function __construct(
+        string $ident = 'PHP',
+        int $facility = LOG_USER,
+        FormatterInterface $formatter = new DefaultFormatter(),
+    ) {
+        $this->formatter = $formatter;
         openlog($ident, LOG_ODELAY | LOG_PID, $facility);
     }
 

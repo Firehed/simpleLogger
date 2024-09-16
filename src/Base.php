@@ -11,12 +11,6 @@ use Psr\Log\LogLevel;
 use Stringable;
 use Throwable;
 
-/**
- * Base class for loggers
- *
- * @package SimpleLogger
- * @author  Frédéric Guillot
- */
 abstract class Base extends AbstractLogger implements ConfigurableLoggerInterface
 {
     protected const LEVELS = [

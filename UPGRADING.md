@@ -6,6 +6,8 @@ Changes:
 
 - Formatting logic has been separated into `FormatterInterface`.
 
+- `Base` adds `public FormatterInterface $formatter`, which allows changing the formatter at runtime (though this is not recommended).
+
 - `DefaultFormatter`, whicih retains the previous log formatting logic, is now a bundled implementation.
   If a logger is constructed without specifying a formatter, this one will be used.
 
@@ -24,3 +26,4 @@ BC Breaks:
 
 - `setFormat` and `setRenderExceptions` has been removed from `ConfigurableLoggerInterface` and all implementations.
   The logic for these has been moved to the formatters.
+  Only `setLevel` remains.

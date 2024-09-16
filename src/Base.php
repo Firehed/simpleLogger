@@ -34,6 +34,8 @@ abstract class Base extends AbstractLogger implements ConfigurableLoggerInterfac
 
     /**
      * Get minimum log level
+     *
+     * @return LogLevel::*
      */
     public function getLevel(): string
     {

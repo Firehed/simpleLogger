@@ -122,9 +122,10 @@ The minimum log level is `LogLevel::DEBUG` by default.
 
 ### Formatting
 
-Starting in 3.0.0, message format customization can be accomplished in two ways:
+Starting in 3.0.0, message format customization can be accomplished in several ways:
 
 - Initialize `DefaultFormatter`, change its format with `setFormat(string $format)`, and pass it to your logger's constructor
+- Use a different bundled formatter, such as `LogFmtFormatter`
 - Create a class that implements `FormatterInterface` and pass that to your logger's constructor
 
 #### `DefaultFormatter`
@@ -142,6 +143,28 @@ The date defaults to ATOM format, but can also be customized via `setDateFormat(
 
 By default, this will ignore `exception` keys and perform normal message interpolation.
 By calling `setRenderExceptions(true)`, the equivalent of `(string) $context['exception']` will be appended to the log message if that key is set, so long as that value is `Throwable`.
+
+#### LogFmt
+
+The `LogFmtFormatter` will write logs in `lgtfmt`(https://brandur.org/logfmt).
+By default, the `msg`, `level`, and `ts` keys will be set, and any values in `context` that are not interpolated will be added as additional key/value pairs.
+Exceptions will also be rendered, in `exception_message`, `exception_type`, and `exception_stacktrace` per [OTel conventions](https://opentelemetry.io/docs/specs/semconv/exceptions/exceptions-logs/).
+
+> [!TIP]
+> Any interpolated values from context will _not_ be put in the key/value pairs.
+> To make the most out of structured log formats such as logfmt, limit interpolation keys in the coded message.
+>
+> For example, prefer this:
+>
+> ```php
+> $logger->debug('Request complete', ['duration_ms' => $ms]);
+> ```
+>
+> over this:
+
+> ```php
+> $logger->debug('Request complete in {duration} ms', ['duration' => $ms]);
+> ```
 
 #### Custom `FormatterInterface`
 

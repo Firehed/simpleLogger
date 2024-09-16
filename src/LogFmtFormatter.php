@@ -69,8 +69,7 @@ class LogFmtFormatter implements FormatterInterface
         $formattedMessage = strtr($message, $pairs);
 
         // Prepare second-pass encoding
-        $pairs = $context;
-        $pairs[$this->messageKey] = $formattedMessage;
+        $pairs = [$this->messageKey => $formattedMessage];
         if ($this->levelKey !== null) {
             $pairs[$this->levelKey] = $level;
         }
@@ -78,6 +77,9 @@ class LogFmtFormatter implements FormatterInterface
             $ts = $this->clock?->now() ?? new DateTimeImmutable();
             $pairs[$this->timestampKey] = $ts->format($this->timestampFormat);
         }
+        // Note: context is merged in _after_ pairs are built to encourage the
+        // typically most important pairs to be at the front of the message.
+        $pairs = array_merge($pairs, $context);
 
         // AFTER interpolating, read out exception if present and munge it into
         // new context.

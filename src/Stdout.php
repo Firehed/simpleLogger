@@ -12,8 +12,8 @@ namespace Firehed\SimpleLogger;
  */
 class Stdout extends File
 {
-    public function __construct()
+    public function __construct(FormatterInterface $formatter = new DefaultFormatter())
     {
-        parent::__construct('php://stdout');
+        parent::__construct('php://stdout', $formatter);
     }
 }

@@ -21,7 +21,7 @@ class File extends Base
      *
      * @param string $filename Output file
      */
-    public function __construct($filename)
+    public function __construct(string $filename, FormatterInterface $formatter = new DefaultFormatter())
     {
         $this->lock = substr($filename, 0, 6) !== 'php://';
         $fh = fopen($filename, 'a');
@@ -29,9 +29,10 @@ class File extends Base
             throw new RuntimeException('Could not open log file');
         }
         $this->fh = $fh;
+        $this->formatter = $formatter;
     }
 
-    protected function write($level, string $message): void
+    protected function write(string $level, string $message): void
     {
         if ($this->lock) {
             flock($this->fh, LOCK_EX);

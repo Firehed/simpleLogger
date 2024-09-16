@@ -8,6 +8,7 @@ use Psr\Log\AbstractLogger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Stringable;
+use TypeError;
 
 class ChainLogger extends AbstractLogger
 {
@@ -17,6 +18,11 @@ class ChainLogger extends AbstractLogger
      */
     public function __construct(private array $loggers = [], public ?string $level = null)
     {
+        foreach ($loggers as $logger) {
+            if (!$logger instanceof LoggerInterface) {
+                throw new TypeError('Non-PSR/Log object passed to chain logger');
+            }
+        }
     }
 
     /**

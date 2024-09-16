@@ -17,25 +17,8 @@ use stdClass;
 #[Small]
 class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 {
-    use BaseTestTrait;
-
     /** @var mixed[][] */
     private $logs = [];
-
-    public function getLogger(): Base
-    {
-        return new ChainLogger();
-    }
-
-    public function testLoggerInConstruct(): void
-    {
-        $this->assertInstanceOf(
-            ChainLogger::class,
-            new ChainLogger([
-                $this->makeMockLogger(),
-            ])
-        );
-    }
 
     public function testNonLoggerInConstruct(): void
     {

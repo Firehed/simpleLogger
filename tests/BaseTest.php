@@ -20,11 +20,17 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     use LogLevelsTrait;
 
     private Base $logger;
+    private FormatterInterface&MockObject $formatter;
 
     public function setUp(): void
     {
-        $this->logger = new class extends Base {
+        $this->formatter = self::createMock(FormatterInterface::class);
+        $this->logger = new class ($this->formatter) extends Base {
             public bool $wrote = false;
+            public function __construct(FormatterInterface $formatter)
+            {
+                $this->formatter = $formatter;
+            }
             protected function write(string $level, string $message): void
             {
                 $this->wrote = true;

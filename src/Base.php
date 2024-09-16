@@ -13,17 +13,6 @@ use Throwable;
 
 abstract class Base extends AbstractLogger
 {
-    protected const LEVELS = [
-        LogLevel::EMERGENCY => \LOG_EMERG,
-        LogLevel::ALERT     => \LOG_ALERT,
-        LogLevel::CRITICAL  => \LOG_CRIT,
-        LogLevel::ERROR     => \LOG_ERR,
-        LogLevel::WARNING   => \LOG_WARNING,
-        LogLevel::NOTICE    => \LOG_NOTICE,
-        LogLevel::INFO      => \LOG_INFO,
-        LogLevel::DEBUG     => \LOG_DEBUG,
-    ];
-
     /**
      * Minimum log level for the logger
      *
@@ -62,9 +51,7 @@ abstract class Base extends AbstractLogger
      */
     public function log($level, string|Stringable $message, array $context = array()): void
     {
-        // Directly access the array and values here rather than run through
-        // getSyslogPriority to avoid the function calls in a potential hotspot
-        if (self::LEVELS[$level] <= self::LEVELS[$this->level]) {
+        if (LevelFilter::shouldLog(messageLevel: $level, minimumLevel: $this->level)) {
             $formatted = $this->formatter->format($level, $message, $context);
             $this->write($level, $formatted);
         }

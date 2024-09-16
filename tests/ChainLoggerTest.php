@@ -17,25 +17,8 @@ use stdClass;
 #[Small]
 class ChainLoggerTest extends \PHPUnit\Framework\TestCase
 {
-    use BaseTestTrait;
-
     /** @var mixed[][] */
     private $logs = [];
-
-    public function getLogger(): Base
-    {
-        return new ChainLogger();
-    }
-
-    public function testLoggerInConstruct(): void
-    {
-        $this->assertInstanceOf(
-            ChainLogger::class,
-            new ChainLogger([
-                $this->makeMockLogger(),
-            ])
-        );
-    }
 
     public function testNonLoggerInConstruct(): void
     {
@@ -87,15 +70,38 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $this->logs);
     }
 
+    public function testTopLevelFiltering(): void
+    {
+
+        $mock1 = $this->makeMockLogger();
+        $soh1 = spl_object_hash($mock1);
+
+        $chain = new ChainLogger([$mock1], LL::NOTICE);
+        $chain->debug('message');
+
+        self::assertSame([$soh1 => []], $this->logs);
+
+        $chain->notice('message');
+
+        $expected = [
+            $soh1 => [
+                [LL::NOTICE, 'message', []],
+            ],
+        ];
+        ksort($expected);
+        ksort($this->logs);
+        self::assertSame($expected, $this->logs);
+    }
+
     private function makeMockLogger(): LoggerInterface
     {
         $mock = $this->createMock(LoggerInterface::class);
         $soh = spl_object_hash($mock);
         $this->logs[$soh] = [];
         $mock->method('log')
-            ->will($this->returnCallback(function (...$args) use ($soh) {
+            ->willReturnCallback(function (...$args) use ($soh) {
                 $this->logs[$soh][] = $args;
-            }));
+            });
         return $mock;
     }
 }

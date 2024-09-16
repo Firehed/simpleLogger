@@ -5,48 +5,43 @@ declare(strict_types=1);
 namespace Firehed\SimpleLogger;
 
 use Psr\Log\AbstractLogger;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Stringable;
+use TypeError;
 
-/**
- * Handler for multiple loggers
- *
- * @package SimpleLogger
- * @author  Frédéric Guillot
- */
-class ChainLogger extends Base
+class ChainLogger extends AbstractLogger
 {
     /**
-     * Logger instances
-     * @var LoggerInterface[]
-     */
-    private $loggers = [];
-
-    /**
      * @param LoggerInterface[] $loggers
+     * @param LogLevel::*|null $level
      */
-    public function __construct(array $loggers = [])
+    public function __construct(private array $loggers = [], public ?string $level = null)
     {
         foreach ($loggers as $logger) {
-            $this->addLogger($logger);
+            if (!$logger instanceof LoggerInterface) {
+                throw new TypeError('Non-PSR/Log object passed to chain logger');
+            }
         }
     }
 
     /**
-     * Sets a logger instance on the object
-     *
-     * @param  LoggerInterface $logger
-     * @return void
+     * Adds an additional logger to the chain
      */
-    public function addLogger(LoggerInterface $logger)
+    public function addLogger(LoggerInterface $logger): void
     {
         $this->loggers[] = $logger;
     }
 
-    protected function writeLog($level, string|Stringable $message, array $context = array()): void
+    /**
+     * @param LogLevel::* $level
+     */
+    public function log($level, string|\Stringable $message, array $context = []): void
     {
+        if (!LevelFilter::shouldLog(messageLevel: $level, minimumLevel: $this->level)) {
+            return;
+        }
+
         foreach ($this->loggers as $logger) {
             $logger->log($level, $message, $context);
         }

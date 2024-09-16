@@ -4,35 +4,46 @@ declare(strict_types=1);
 
 namespace Firehed\SimpleLogger;
 
-use RuntimeException;
 use Psr\Log\LogLevel;
+use Stringable;
 
-/**
- * Syslog Logger
- *
- * @package SimpleLogger
- * @author  Frédéric Guillot
- */
 class Syslog extends Base
 {
+    protected const LEVELS = [
+        LogLevel::EMERGENCY => \LOG_EMERG,
+        LogLevel::ALERT     => \LOG_ALERT,
+        LogLevel::CRITICAL  => \LOG_CRIT,
+        LogLevel::ERROR     => \LOG_ERR,
+        LogLevel::WARNING   => \LOG_WARNING,
+        LogLevel::NOTICE    => \LOG_NOTICE,
+        LogLevel::INFO      => \LOG_INFO,
+        LogLevel::DEBUG     => \LOG_DEBUG,
+    ];
+
     /**
      * Setup Syslog configuration
      *
-     * @param  string $ident    Application name
+     * @param $ident Application name
      * @param  int    $facility See http://php.net/manual/en/function.openlog.php
      */
-    public function __construct($ident = 'PHP', $facility = LOG_USER)
-    {
-        if (! openlog($ident, LOG_ODELAY | LOG_PID, $facility)) {
-            throw new RuntimeException('Unable to connect to syslog.');
-        }
+    public function __construct(
+        string $ident = 'PHP',
+        int $facility = LOG_USER,
+        FormatterInterface $formatter = new DefaultFormatter(),
+    ) {
+        $this->formatter = $formatter;
+        openlog($ident, LOG_ODELAY | LOG_PID, $facility);
     }
 
-    protected function writeLog($level, $message, array $context = array()): void
+    protected function write($level, string $message): void
     {
         $syslogPriority = $this->getSyslogPriority($level);
-        $syslogMessage = $this->interpolate($message, $context);
 
-        syslog($syslogPriority, $syslogMessage);
+        syslog($syslogPriority, $message);
+    }
+
+    protected function getSyslogPriority(string $psrLevel): int
+    {
+        return self::LEVELS[$psrLevel];
     }
 }

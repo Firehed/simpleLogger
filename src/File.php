@@ -5,13 +5,8 @@ declare(strict_types=1);
 namespace Firehed\SimpleLogger;
 
 use RuntimeException;
+use Stringable;
 
-/**
- * File logger
- *
- * @package SimpleLogger
- * @author  Frédéric Guillot
- */
 class File extends Base
 {
     /**
@@ -19,17 +14,14 @@ class File extends Base
      */
     protected $fh;
 
-    /**
-     * @var bool
-     */
-    private $lock = false;
+    private bool $lock = false;
 
     /**
      * Setup logger configuration
      *
      * @param string $filename Output file
      */
-    public function __construct($filename)
+    public function __construct(string $filename, FormatterInterface $formatter = new DefaultFormatter())
     {
         $this->lock = substr($filename, 0, 6) !== 'php://';
         $fh = fopen($filename, 'a');
@@ -37,16 +29,15 @@ class File extends Base
             throw new RuntimeException('Could not open log file');
         }
         $this->fh = $fh;
+        $this->formatter = $formatter;
     }
 
-    protected function writeLog($level, $message, array $context = array()): void
+    protected function write(string $level, string $message): void
     {
-        $line = $this->formatMessage($level, $message, $context);
-
         if ($this->lock) {
             flock($this->fh, LOCK_EX);
         }
-        if (fwrite($this->fh, $line) === false) {
+        if (fwrite($this->fh, $message . \PHP_EOL) === false) {
             throw new RuntimeException('Unable to write to the log file.');
         }
         if ($this->lock) {

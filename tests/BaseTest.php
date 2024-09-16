@@ -7,44 +7,42 @@ namespace Firehed\SimpleLogger;
 use LogicException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel as LL;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass Firehed\SimpleLogger\Base
- * @covers ::<protected>
- * @covers ::<private>
- */
+#[CoversClass(Base::class)]
+#[Small]
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
     use LogLevelsTrait;
 
-    /** @var Base | \PHPUnit\Framework\MockObject\MockObject */
-    private $logger;
-
-    /** @var bool */
-    private $wrote = false;
+    private Base $logger;
+    private FormatterInterface&MockObject $formatter;
 
     public function setUp(): void
     {
-        $this->logger = $this->getMockForAbstractClass(Base::class);
-
-        $this->logger->method('writeLog')
-            ->will($this->returnCallback(function () {
-                $this->wrote = true;
-            }));
+        $this->formatter = self::createMock(FormatterInterface::class);
+        $this->logger = new class ($this->formatter) extends Base {
+            public ?string $written = null;
+            public function __construct(FormatterInterface $formatter)
+            {
+                $this->formatter = $formatter;
+            }
+            protected function write(string $level, string $message): void
+            {
+                $this->written = $message;
+            }
+        };
     }
 
-    /**
-     * @covers ::getLevel
-     */
     public function testDefaultLevelIsDebug(): void
     {
         $this->assertSame(LL::DEBUG, $this->logger->getLevel());
     }
 
-    /**
-     * @covers ::getLevel
-     * @covers ::setLevel
-     */
     public function testSetLevel(): void
     {
         $this->assertNotSame(LL::EMERGENCY, $this->logger->getLevel());
@@ -52,26 +50,36 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(LL::EMERGENCY, $this->logger->getLevel());
     }
 
+    public function testFormatterIsApplied(): void
+    {
+        $this->formatter->expects(self::once())
+            ->method('format')
+            ->with(LL::NOTICE, 'message', ['a' => 'b'])
+            ->willReturn('msg=message a=b');
+        $this->logger->notice('message', ['a' => 'b']);
+        self::assertSame('msg=message a=b', $this->logger->written); // @phpstan-ignore-line
+    }
+
     /**
-     * @covers ::log
-     * @dataProvider levelFiltering
+     * @param LL::* $atLevel
      * @param array<LL::*> $shouldLog Levels which should be logged
      */
+    #[DataProvider('levelFiltering')]
     public function testFiltering(string $atLevel, array $shouldLog): void
     {
         $this->logger->setLevel($atLevel);
-        foreach ($this->allLevels() as $levelDP) {
+        foreach (self::allLevels() as $levelDP) {
             list($level) = $levelDP;
-            $this->wrote = false;
+            $this->logger->written = null; // @phpstan-ignore-line
             $this->logger->log($level, 'someMessage');
             if (in_array($level, $shouldLog)) {
-                $this->assertTrue(
-                    $this->wrote,
+                $this->assertNotNull(
+                    $this->logger->written, // @phpstan-ignore-line
                     "$level should have logged at $atLevel but did not"
                 );
             } else {
-                $this->assertFalse(
-                    $this->wrote,
+                $this->assertNull(
+                    $this->logger->written, // @phpstan-ignore-line
                     "$level should not have logged at $atLevel but did"
                 );
             }
@@ -79,41 +87,9 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers ::getCurrentSyslogPriority
-     * @covers ::setLevel
-     * @dataProvider syslogMap
-     */
-    public function testCorrectMappingOfPsrToSyslog(string $psrLevel, int $syslogLevel): void
-    {
-        $this->logger->setLevel($psrLevel);
-        $this->assertSame($syslogLevel, $this->logger->getCurrentSyslogPriority());
-    }
-
-    /** @covers ::setFormat */
-    public function testSetFormat(): void
-    {
-        // @phpstan-ignore-next-line
-        $this->assertNull($this->logger->setFormat('[{level}] %s'));
-    }
-
-    /** @covers ::setDateFormat */
-    public function testSetDateFormat(): void
-    {
-        // @phpstan-ignore-next-line
-        $this->assertNull($this->logger->setDateFormat('%Y-%m-%d'));
-    }
-
-    /** @covers ::setFormat */
-    public function testSetFormatFailsIfPlaceholderIsMissing(): void
-    {
-        $this->expectException(LogicException::class);
-        $this->logger->setFormat('[{level}] oops no percent s');
-    }
-
-    /**
      * @return array<LL::*|array<LL::*>>[]
      */
-    public function levelFiltering(): array
+    public static function levelFiltering(): array
     {
         return [
             [
@@ -148,23 +124,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
                 LL::DEBUG,
                 [LL::EMERGENCY, LL::ALERT, LL::CRITICAL, LL::ERROR, LL::WARNING, LL::NOTICE, LL::INFO, LL::DEBUG]
             ],
-        ];
-    }
-
-    /**
-     * @return array<string|int>[]
-     */
-    public function syslogMap(): array
-    {
-        return [
-            [LL::EMERGENCY, LOG_EMERG],
-            [LL::ALERT, LOG_ALERT],
-            [LL::CRITICAL, LOG_CRIT],
-            [LL::ERROR, LOG_ERR],
-            [LL::WARNING, LOG_WARNING],
-            [LL::NOTICE, LOG_NOTICE],
-            [LL::INFO, LOG_INFO],
-            [LL::DEBUG, LOG_DEBUG],
         ];
     }
 }

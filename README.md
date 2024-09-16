@@ -75,16 +75,6 @@ $logger->info('foobar');
 
 // Output to the file: "[2013-06-02 16:03:28] [error] Error at /Users/fred/Devel/libraries/simpleLogger/example.php at line 24"
 $logger->error('Error at {filename} at line {line}', array('filename' => __FILE__, 'line' => __LINE__));
-
-// Dump a variable
-$values = array(
-    'key' => 'value'
-);
-
-// Output: [2013-06-02 16:05:32] [debug] array (
-//  'key' => 'value',
-// )
-$logger->dump($values);
 ```
 
 ### Multiple loggers
@@ -132,7 +122,13 @@ The minimum log level is `LogLevel::DEBUG` by default.
 
 ### Formatting
 
-Starting in 2.1.0, custom message formatting can be configured with the `setFormat(string $format)` method.
+Starting in 3.0.0, message format customization can be accomplished in two ways:
+
+- Initialize `DefaultFormatter`, change its format with `setFormat(string $format)`, and pass it to your logger's constructor
+- Create a class that implements `FormatterInterface` and pass that to your logger's constructor
+
+#### `DefaultFormatter`
+
 The format provided MUST include `%s`, which is where the actual interpolated message will be placed.
 Formats MAY include `{date}` and/or `{level}`, which are placeholders for the timestamp and log level respectively.
 
@@ -144,15 +140,11 @@ The default format is `[{date}] [{level}] %s`, which will result in a log messag
 
 The date defaults to ATOM format, but can also be customized via `setDateFormat(string $format)` using any format string that `date()` accepts.
 
-Note: at this time, the `Syslog` logger does not use these formats.
+By default, this will ignore `exception` keys and perform normal message interpolation.
+By calling `setRenderExceptions(true)`, the equivalent of `(string) $context['exception']` will be appended to the log message if that key is set, so long as that value is `Throwable`.
 
-### Exception rendering
+#### Custom `FormatterInterface`
 
-Starting in 2.4.0, the loggers in this library have the ability to automatically render exceptions when passed to `$context` in the `exception` index.
-To avoid changing existing logging formats, this behavior must be explicitly adopted:
-
-```php
-$logger->setRenderExceptions(true);
-```
-
-If configured AND `$context['exception'] instanceof \Throwable`, then the exception will be cast to a string and appended to the end of the message.
+If you need deeper customization, such as log enrichment or more major format shifts, a custom `FormatterInterface` is the way to go.
+Doing so requires your own interpolation logic, as well as any other message enrichment or formatting.
+You'll be passed the same (unmodified) parameters as `LoggerInterface::log()` gets, and are responsible for transforming these values into a string.

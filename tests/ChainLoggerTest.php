@@ -93,9 +93,9 @@ class ChainLoggerTest extends \PHPUnit\Framework\TestCase
         $soh = spl_object_hash($mock);
         $this->logs[$soh] = [];
         $mock->method('log')
-            ->will($this->returnCallback(function (...$args) use ($soh) {
+            ->willReturnCallback(function (...$args) use ($soh) {
                 $this->logs[$soh][] = $args;
-            }));
+            });
         return $mock;
     }
 }

@@ -30,9 +30,9 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->logger = $this->getMockForAbstractClass(Base::class);
 
         $this->logger->method('writeLog')
-            ->will($this->returnCallback(function () {
+            ->willReturnCallback(function () {
                 $this->wrote = true;
-            }));
+            });
     }
 
     public function testDefaultLevelIsDebug(): void

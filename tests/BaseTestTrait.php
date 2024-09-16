@@ -6,6 +6,8 @@ namespace Firehed\SimpleLogger;
 
 use Psr\Log\LogLevel;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use RuntimeException;
 
 /**
@@ -17,9 +19,6 @@ trait BaseTestTrait
 
     abstract protected function getLogger(): Base;
 
-    /**
-     * @covers ::__construct
-     */
     public function testIsLogger(): void
     {
         $logger = $this->getLogger();
@@ -27,10 +26,7 @@ trait BaseTestTrait
         $this->assertInstanceOf(ConfigurableLoggerInterface::class, $logger);
     }
 
-    /**
-     * @covers ::log
-     * @dataProvider allLevels
-     */
+    #[DataProvider('allLevels')]
     public function testSimpleWriteViaDirect(string $level): void
     {
         $this->assertNull(
@@ -39,22 +35,20 @@ trait BaseTestTrait
     }
 
     /**
-     * @covers ::log
-     * @dataProvider allLevels
      * @param LogLevel::* $level
-     * @doesNotPerformAssertions
      */
+    #[DataProvider('allLevels')]
+    #[DoesNotPerformAssertions]
     public function testSimpleWriteViaLog(string $level): void
     {
         $this->getLogger()->log($level, 'Some message');
     }
 
     /**
-     * @covers ::log
-     * @dataProvider allLevels
      * @param LogLevel::* $level
-     * @doesNotPerformAssertions
      */
+    #[DataProvider('allLevels')]
+    #[DoesNotPerformAssertions]
     public function testInterpolatedMessageAtAllLevels(string $level): void
     {
         $this->getLogger()->log(

@@ -26,14 +26,14 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     {
         $this->formatter = self::createMock(FormatterInterface::class);
         $this->logger = new class ($this->formatter) extends Base {
-            public bool $wrote = false;
+            public ?string $written = null;
             public function __construct(FormatterInterface $formatter)
             {
                 $this->formatter = $formatter;
             }
             protected function write(string $level, string $message): void
             {
-                $this->wrote = true;
+                $this->written = $message;
             }
         };
     }
@@ -50,6 +50,16 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(LL::EMERGENCY, $this->logger->getLevel());
     }
 
+    public function testFormatterIsApplied(): void
+    {
+        $this->formatter->expects(self::once())
+            ->method('format')
+            ->with(LL::NOTICE, 'message', ['a' => 'b'])
+            ->willReturn('msg=message a=b');
+        $this->logger->notice('message', ['a' => 'b']);
+        self::assertSame('msg=message a=b', $this->logger->written); // @phpstan-ignore-line
+    }
+
     /**
      * @param LL::* $atLevel
      * @param array<LL::*> $shouldLog Levels which should be logged
@@ -60,16 +70,16 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $this->logger->setLevel($atLevel);
         foreach (self::allLevels() as $levelDP) {
             list($level) = $levelDP;
-            $this->logger->wrote = false; // @phpstan-ignore-line
+            $this->logger->written = null; // @phpstan-ignore-line
             $this->logger->log($level, 'someMessage');
             if (in_array($level, $shouldLog)) {
-                $this->assertTrue(
-                    $this->logger->wrote, // @phpstan-ignore-line
+                $this->assertNotNull(
+                    $this->logger->written, // @phpstan-ignore-line
                     "$level should have logged at $atLevel but did not"
                 );
             } else {
-                $this->assertFalse(
-                    $this->logger->wrote, // @phpstan-ignore-line
+                $this->assertNull(
+                    $this->logger->written, // @phpstan-ignore-line
                     "$level should not have logged at $atLevel but did"
                 );
             }

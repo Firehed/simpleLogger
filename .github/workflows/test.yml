@@ -71,7 +71,7 @@ jobs:
           ${{ matrix.dependencies == 'low' && '--config phpunit10.xml.dist' || '' }}
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
